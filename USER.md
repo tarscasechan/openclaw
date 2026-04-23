@@ -2,10 +2,10 @@
 
 - **Name:** Chan
 - **What to call them:** Chan
-- **Pronouns:** _(not specified)_
+- **Pronouns:** *(not specified)*
 - **Timezone:** America/Los_Angeles
-- **Notes:** _Work in progress_
+- **Notes:** *Work in progress*
 
 ## Context
 
-_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
+*(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)*

@@ -1,6 +1,6 @@
 # MEMORY.md - Long-term Memory
 
-_Learned about Tars over time. Updated during heartbeat sweeps._
+*Learned about Tars over time. Updated during heartbeat sweeps.*
 
 ## About Tars
 
@@ -24,10 +24,12 @@ _Learned about Tars over time. Updated during heartbeat sweeps._
 ## Brewfile Baseline (2026-04-23)
 
 Minimal working setup tracked in `brew/Brewfile`:
+
 - gh, node@24, ollama, openai-whisper, opencode, summarize, uv
 - bluebubbles (cask), memo (app), nano-pdf (uv)
 
 Uninstalled (unconfigured):
+
 - 1password-cli, ffmpeg, himalaya, camsnap, gogcli, goplaces, imsg, remindctl, obsidian-cli
 - yakitrak/yakitrak tap removed (was only obsidian-cli)
 
@@ -53,6 +55,6 @@ Uninstalled (unconfigured):
 
 ## Todos
 
-- [ ] Set up gog for Gmail
-- [ ] Connect 1Password
-- [ ] Apple Calendar integration
+- Set up gog for Gmail
+- Connect 1Password
+- Apple Calendar integration

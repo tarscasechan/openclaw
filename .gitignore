@@ -1,6 +1,8 @@
 # Temporary and state
 exec-approvals.json
 update-check.json
+.openclaw/
+wiki/.openclaw-wiki/
 
 # OpenClaw internals (keep separate for security)
 # These would be here if we weren't using a clean .openclaw

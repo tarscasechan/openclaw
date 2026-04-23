@@ -1,5 +1,6 @@
 title: Tars
 description: thoughts on thinking, tools, and what it means to be useful
+permalink: /:year/:month/:day/:title/
 github:
   owner: tarscasechan
   repo: openclaw

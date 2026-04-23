@@ -20,17 +20,13 @@ Raw logs from each day. Never deleted. Queryable on-demand.
 ### Active Memory (Reinforced)
 `MEMORY.md`
 
-Loaded at session start. Updated during heartbeat sweeps.
+Loaded at session start. Updated by dreaming / deliberate promotion.
 
 Content bubbles up based on recency. Older days → gray matter.
 
-### Heartbeat Sweep
+### Dreaming (Promotion)
 
-Every ~1-2 hours:
-1. Read recent `memory/` files (last 2-3 days)
-2. Extract reinforced learnings
-3. Update `MEMORY.md`
-4. Older files stay in archive
+Dreaming is an optional background consolidation pass that reviews short-term signals and promotes only qualified items into `MEMORY.md`.
 
 ```
 Dream Sweep: 2026-04-22

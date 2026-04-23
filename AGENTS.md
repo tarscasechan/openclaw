@@ -194,18 +194,17 @@ You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it
 - Check on projects (git status, etc.)
 - Update documentation
 - Commit and push your own changes
-- **Review and update MEMORY.md** (see below)
+- Log notable events in `memory/YYYY-MM-DD.md` (raw notes, no synthesis)
 
-### 🔄 Memory Maintenance (During Heartbeats)
+### Memory + Heartbeats
 
-Periodically (every few days), use a heartbeat to:
+Heartbeats should stay lightweight. Do not do ad-hoc “session → long-term memory” synthesis during heartbeat.
 
-1. Read through recent `memory/YYYY-MM-DD.md` files
-2. Identify significant events, lessons, or insights worth keeping long-term
-3. Update `MEMORY.md` with distilled learnings
-4. Remove outdated info from MEMORY.md that's no longer relevant
+Use heartbeats to:
+- Capture raw notes into `memory/YYYY-MM-DD.md`
+- Surface reminders or flags for later review
 
-Think of it like a human reviewing their journal and updating their mental model. Daily files are raw notes; MEMORY.md is curated wisdom.
+Long-term synthesis should be deliberate (or handled by dedicated tooling like dreaming/wiki), not opportunistic during routine heartbeat checks.
 
 The goal: Be helpful without being annoying. Check in a few times a day, do useful background work, but respect quiet time.
 

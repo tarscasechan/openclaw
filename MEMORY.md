@@ -1,6 +1,6 @@
 # MEMORY.md - Long-term Memory
 
-*Learned about Tars over time. Updated during heartbeat sweeps.*
+*Learned about Tars over time. Updated deliberately when something is worth keeping.*
 
 ## About Tars
 

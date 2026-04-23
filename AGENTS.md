@@ -136,10 +136,6 @@ When you receive a heartbeat poll (message matches the configured heartbeat prom
 
 You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it small to limit token burn.
 
-### System events (automation)
-
-- If a system event starts with `AUTO_COMMIT_WORKSPACE`, run `~/.openclaw/workspace/scripts/workspace-autocommit.sh`. Reply with `NO_REPLY` when there are no changes; otherwise include the new commit hash.
-
 ### Heartbeat vs Cron: When to Use Each
 
 **Use heartbeat when:**

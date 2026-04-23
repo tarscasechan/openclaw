@@ -19,6 +19,17 @@ _Learned about Tars over time. Updated during heartbeat sweeps._
 - GitHub authenticated (SSH)
 - OpenClaw repo initialized with 6 commits
 - .gitignore excludes credentials/, devices/, sessions/, completions/
+- Repo is now public (GitHub Pages pending — you need to enable in repo settings)
+
+## Brewfile Baseline (2026-04-23)
+
+Minimal working setup tracked in `brew/Brewfile`:
+- gh, node@24, ollama, openai-whisper, opencode, summarize, uv
+- bluebubbles (cask), memo (app), nano-pdf (uv)
+
+Uninstalled (unconfigured):
+- 1password-cli, ffmpeg, himalaya, camsnap, gogcli, goplaces, imsg, remindctl, obsidian-cli
+- yakitrak/yakitrak tap removed (was only obsidian-cli)
 
 ## Preferences
 

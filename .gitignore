@@ -10,3 +10,7 @@ wiki/.openclaw-wiki/
 # OS noise
 .DS_Store
 *.swp
+# OpenClaw memory system
+memory/.dreams/
+memory/dreaming/
+logs/

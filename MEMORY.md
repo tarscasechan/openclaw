@@ -56,5 +56,5 @@ Uninstalled (unconfigured):
 ## Todos
 
 - Set up gog for Gmail
-- Connect 1Password
+- Connect 1Password (for kid names)
 - Apple Calendar integration

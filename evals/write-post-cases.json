@@ -1,0 +1,375 @@
+[
+  {
+    "id": "stage_select_vague_idea",
+    "stage": "stage_selection",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "I want to write something about agent workflows being brittle. Help.",
+    "expect": [
+      "identifies the missing reader/output assumptions",
+      "asks at most one focused question or proceeds with explicit assumptions",
+      "does not draft the full post"
+    ],
+    "fail_if": [
+      "produces a finished post",
+      "asks a long questionnaire",
+      "pretends research has been done"
+    ]
+  },
+  {
+    "id": "ideate_topic_only_no_draft",
+    "stage": "ideation",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Give me topic angles for a builder post about agents losing task state.",
+    "expect": [
+      "returns 3-5 candidate angles",
+      "each angle includes hook, reader, tension, and why-now",
+      "does not draft the post"
+    ],
+    "fail_if": [
+      "jumps to a full draft",
+      "omits reader or tension",
+      "uses only broad themes"
+    ]
+  },
+  {
+    "id": "weak_pain_points_block",
+    "stage": "pain_points",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Package this topic: AI is changing productivity and users want better tools.",
+    "expect": [
+      "flags the pain as weak or vague",
+      "asks for concrete failure/cost/workaround or restarts from concept",
+      "does not produce a confident brief"
+    ],
+    "fail_if": [
+      "packages broad trends as concrete pain",
+      "invents user complaints",
+      "drafts the post"
+    ]
+  },
+  {
+    "id": "evidence_notes_to_pain_points",
+    "stage": "pain_points",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Use these notes: users lose agent work after resets; async runs die silently; agents say they are waiting when no process exists; people retry the whole task. Extract pain points only.",
+    "expect": [
+      "names failures, who feels them, costs, attempted workarounds, and why those fail",
+      "stays within provided notes",
+      "does not package or draft"
+    ],
+    "fail_if": [
+      "adds unsupported market claims",
+      "adds fake citations or benchmarks",
+      "turns the output into a post"
+    ]
+  },
+  {
+    "id": "pain_points_include_author_stake",
+    "stage": "pain_points",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Use these notes: I kept coming back to a half-finished draft and having to reconstruct where I left off; the cost was losing momentum; I tried rereading notes but that turned writing into archaeology. Extract pain points only, including author stake.",
+    "expect": [
+      "extracts failure, who feels it, cost, attempted workaround, and why it fails",
+      "keeps the author's lived stake instead of generalizing it away",
+      "does not package or draft"
+    ],
+    "fail_if": [
+      "turns first-person experience into generic users",
+      "invents external evidence",
+      "drafts the post"
+    ]
+  },
+  {
+    "id": "want_need_get_passes",
+    "stage": "packaging",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Create a want/need/get brief from this: builders want agents that can survive resets; they need durable task state because chat memory dies and async work gets misreported; the new shape is file-backed slices with explicit blockers and proof gates.",
+    "expect": [
+      "brief has Want, Need, and Get",
+      "Get names the mechanism, not just the promise",
+      "tradeoffs are stated plainly"
+    ],
+    "fail_if": [
+      "drafts full prose",
+      "hides tradeoffs",
+      "uses vague promises"
+    ]
+  },
+  {
+    "id": "hook_lab_generates_human_hooks",
+    "stage": "hook_lab",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Run hook lab for a personal builder post about writing workflows failing after interruption. Return 3-5 first-sentence hooks with hook type, reader tension, and why each works. Do not draft the post.",
+    "expect": [
+      "returns 3-5 short hook candidates",
+      "labels hook types such as lived friction, reader pain, misconception, scene, or mechanism",
+      "ties each hook to reader tension"
+    ],
+    "fail_if": [
+      "drafts the post",
+      "returns generic article summaries",
+      "uses hooks that explain too much"
+    ]
+  },
+  {
+    "id": "malformed_brief_blocks_drafting",
+    "stage": "drafting",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Draft the post from this brief: Want: better agents. Need: AI is hard. Get: better workflow.",
+    "expect": [
+      "blocks or restarts from concept because the brief is too weak",
+      "explains the missing concrete pain/mechanism",
+      "does not write the full post"
+    ],
+    "fail_if": [
+      "drafts from the malformed brief",
+      "invents details to fill the brief",
+      "claims the structure is strong"
+    ]
+  },
+  {
+    "id": "draft_from_strong_brief",
+    "stage": "drafting",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Draft from this brief. Want: Builders want agents that keep working after the chat dies. Need: chat memory and async jobs are fragile, so agents misreport progress and users restart work. Get: file-backed task slices with explicit blockers, proof gates, and resumable next actions. Tradeoff: it is less magical, more operational.",
+    "expect": [
+      "leads with the point",
+      "stays builder-first and brief",
+      "keeps tradeoff visible",
+      "uses want/need/get as scaffolding without literal Want, Need, or Get headings",
+      "does not over-polish"
+    ],
+    "fail_if": [
+      "opens with generic AI trend throat-clearing",
+      "uses Want, Need, or Get as post-body section headings",
+      "drops the tradeoff",
+      "adds unsupported claims"
+    ]
+  },
+  {
+    "id": "draft_uses_reader_journey_hook",
+    "stage": "drafting",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Draft from this plan. Voice contract: personal builder post using I and you. Hook: The blank page was not the hard part. Reader journey: recognition: returning to a draft after interruption; friction: reconstructing context kills momentum; turn: the workflow should leave breadcrumbs; mechanism: next action, blocker, and state are written down; tradeoff: less magical, more explicit. Do not use Want/Need/Get headings.",
+    "expect": [
+      "opens with the supplied hook",
+      "uses personal or reader-facing pronouns naturally",
+      "translates the journey into prose without Want/Need/Get headings",
+      "keeps the tradeoff visible"
+    ],
+    "fail_if": [
+      "uses Want, Need, or Get as section headings",
+      "opens with generic context",
+      "removes the personal voice"
+    ]
+  },
+  {
+    "id": "decorative_demo_rejected",
+    "stage": "demo_decision",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Add a Mermaid diagram to this simple line: Agents should update a task file after each meaningful step.",
+    "expect": [
+      "rejects or avoids the diagram as decorative",
+      "explains that prose is enough",
+      "does not add a redundant visual"
+    ],
+    "fail_if": [
+      "adds a diagram that repeats the sentence",
+      "adds multiple visuals",
+      "treats decoration as teaching"
+    ]
+  },
+  {
+    "id": "demo_plan_without_forcing_visual",
+    "stage": "demo_plan",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Demo plan only: personal post about the feeling of reconstructing a half-finished draft after interruption. Decide whether the post needs a demo before drafting. Do not create the demo.",
+    "expect": [
+      "chooses no demo or explains why prose is enough",
+      "names the job a demo would need to do",
+      "does not create a diagram"
+    ],
+    "fail_if": [
+      "adds a Mermaid diagram",
+      "forces a visual because the post is about workflow",
+      "drafts the article"
+    ]
+  },
+  {
+    "id": "useful_demo_added",
+    "stage": "demo_decision",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "For a systems post, show the flow from user request to task file to model slice to proof gate to resume. Add a demo only if it teaches faster than prose.",
+    "expect": [
+      "adds one compact Mermaid flow or equivalent",
+      "the visual clarifies the system",
+      "does not add decorative extras"
+    ],
+    "fail_if": [
+      "refuses a useful diagram",
+      "adds more than one visual",
+      "diagram contradicts the requested flow"
+    ]
+  },
+  {
+    "id": "humanity_edit_preserves_voice",
+    "stage": "humanity_edit",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Humanity edit this paragraph without changing the meaning: In today's rapidly evolving AI landscape, it is important to recognize that robust agentic workflows empower users to maximize productivity. The annoying truth is simpler: the agent forgot where it was and lied about waiting.",
+    "expect": [
+      "removes AI tells and performative polish",
+      "keeps the strong human sentence or its cadence",
+      "does not rewrite into generic marketing prose"
+    ],
+    "fail_if": [
+      "removes the memorable line",
+      "adds more corporate tone",
+      "changes the meaning"
+    ]
+  },
+  {
+    "id": "zinsser_edit_tightens_without_flattening",
+    "stage": "zinsser_edit",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Zinsser edit this while keeping voice: The system was, in a variety of subtle and not-so-subtle ways, pretending that continuity existed because the chat still existed, even though the actual work had already fallen on the floor.",
+    "expect": [
+      "cuts clutter",
+      "keeps the core image",
+      "uses active direct phrasing"
+    ],
+    "fail_if": [
+      "turns it into bland summary",
+      "keeps most clutter",
+      "changes the point"
+    ]
+  },
+  {
+    "id": "zinsser_preserves_pronouns_and_warmth",
+    "stage": "zinsser_edit",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Zinsser edit this while preserving warmth and pronouns: I kept coming back to the draft and reconstructing the work from scratch. The process had no breadcrumbs, so every restart felt heavier than it should have.",
+    "expect": [
+      "tightens the prose",
+      "keeps I or another personal pronoun",
+      "keeps the lived texture of coming back, breadcrumbs, or reconstructing work"
+    ],
+    "fail_if": [
+      "turns I into the author or users",
+      "removes the lived texture",
+      "makes the sentence colder"
+    ]
+  },
+  {
+    "id": "personal_pronouns_restore_voice",
+    "stage": "humanity_edit",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Humanity edit this for a personal blog voice: It is frustrating when a writing workflow makes the author reconstruct the work every time the session breaks. The process feels impersonal and distant.",
+    "expect": [
+      "uses personal pronouns where they make the prose feel owned",
+      "avoids impersonal phrases like the author or the user",
+      "keeps the point about reconstruction after interruption"
+    ],
+    "fail_if": [
+      "keeps the author or the user as the subject",
+      "removes the personal frustration",
+      "turns the note into generic advice"
+    ]
+  },
+  {
+    "id": "resume_from_task_file",
+    "stage": "resume",
+    "requires_model": true,
+    "hard_fail": true,
+    "fixture_files": {
+      "tasks/write-post.md": "# write-post\n\nStatus: in_progress\nCurrent stage: demo decision\nNext slice: decide whether the draft needs a diagram\nBlocker: none\n"
+    },
+    "prompt": "Continue the post work.",
+    "expect": [
+      "resumes from demo decision",
+      "does not restart ideation",
+      "does not claim stale background work is running"
+    ],
+    "fail_if": [
+      "ignores task state",
+      "restarts from concept",
+      "claims live progress without proof"
+    ]
+  },
+  {
+    "id": "review_existing_post_next_slice",
+    "stage": "review",
+    "requires_model": true,
+    "hard_fail": false,
+    "fixture_paths": [
+      "_posts/2026-04-29-crash-resistant-automation.md"
+    ],
+    "prompt": "Review the supplied post with the write-post workflow. Do not rewrite it. Return a verdict: ship, revise, or restart, plus the next useful slice.",
+    "expect": [
+      "gives a clear ship/revise/restart verdict",
+      "mentions reader pain or want/need/get structure",
+      "does not rewrite the post"
+    ],
+    "fail_if": [
+      "returns a full rewritten post",
+      "only gives generic praise",
+      "ignores the next slice"
+    ]
+  },
+  {
+    "id": "edit_existing_post_preserves_sparse_voice",
+    "stage": "zinsser_edit",
+    "requires_model": true,
+    "hard_fail": true,
+    "fixture_paths": [
+      "_posts/2026-04-29-openclaw-orchestration.md"
+    ],
+    "prompt": "Tighten the opening and rule-of-thumb lines in the supplied post. Preserve the sparse voice. Return only the edited lines, not a full rewrite.",
+    "expect": [
+      "keeps the sparse direct voice",
+      "does not add generic AI/product language",
+      "does not rewrite the whole post"
+    ],
+    "fail_if": [
+      "bloats the prose",
+      "adds corporate or AI-sounding filler",
+      "rewrites unrelated sections"
+    ]
+  },
+  {
+    "id": "audit_existing_demo_decision",
+    "stage": "demo_decision",
+    "requires_model": true,
+    "hard_fail": false,
+    "fixture_paths": [
+      "_posts/2026-04-30-what-i-learned-breaking-the-writing-workflow.md"
+    ],
+    "prompt": "Audit the supplied post's Mermaid diagram. Decide whether to keep, cut, or replace it. Do not draft new prose unless needed for the demo decision.",
+    "expect": [
+      "makes a clear keep/cut/replace decision",
+      "explains what job the diagram does or fails to do",
+      "does not draft a new post"
+    ],
+    "fail_if": [
+      "adds a second decorative visual",
+      "rewrites the whole post",
+      "does not make a decision"
+    ]
+  }
+]

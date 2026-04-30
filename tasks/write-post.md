@@ -107,3 +107,9 @@ Builders first. General readers second.
 - Next gate: verify frontmatter, word counts, no literal Want/Need/Get headings, balanced fences, and whitespace diff.
 - Verification result: all five new posts have valid frontmatter, 784-851 body words, no literal Want/Need/Get headings, balanced code fences, and passed `git diff --check` for tracked task state plus new post paths.
 - Build gate: not run locally because workspace has no Gemfile and `jekyll` CLI is not installed; structural/content gates passed.
+
+## 2026-04-30: route/title slug normalization
+- User noticed renamed post titles did not have matching files/routes and said dead paths are acceptable because the blog is fresh.
+- Because `_config.yml` uses `permalink: /:title/`, normalized post filenames to title-derived slugs with no redirects.
+- Renamed 16 post files whose filename slug did not match current title; `Agents Need Receipts` already matched.
+- Next gate: verify every `_posts/*.md` filename slug matches its frontmatter title slug and run `git diff --check`.

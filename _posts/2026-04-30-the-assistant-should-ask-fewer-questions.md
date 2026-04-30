@@ -1,10 +1,10 @@
 ---
-layout: post
+
+## layout: post
 title: "The Assistant Should Ask Fewer Questions"
 date: 2026-04-30
 description: "A good personal agent should act on recoverable assumptions and save questions for the choices that actually need a human."
 tags: [agents, autonomy, workflow]
----
 
 The easiest way for an assistant to look safe is to ask another question.
 
@@ -60,6 +60,8 @@ flowchart TB
   Risk -->|no| A
   R -->|no| Ask
 ```
+
+
 
 This is the kind of diagram that looks obvious after you draw it. That is why it helps. It gives the agent a path other than “ask more” or “recklessly guess.”
 

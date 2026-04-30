@@ -318,7 +318,7 @@
     "requires_model": true,
     "hard_fail": false,
     "fixture_paths": [
-      "_posts/2026-04-29-crash-resistant-automation.md"
+      "_posts/2026-04-29-a-script-is-not-automation-until-it-can-be-interrupted.md"
     ],
     "prompt": "Review the supplied post with the write-post workflow. Do not rewrite it. Return a verdict: ship, revise, or restart, plus the next useful slice.",
     "expect": [
@@ -338,7 +338,7 @@
     "requires_model": true,
     "hard_fail": true,
     "fixture_paths": [
-      "_posts/2026-04-29-openclaw-orchestration.md"
+      "_posts/2026-04-29-use-the-smallest-openclaw-surface-that-can-tell-the-truth.md"
     ],
     "prompt": "Tighten the opening and rule-of-thumb lines in the supplied post. Preserve the sparse voice. Return only the edited lines, not a full rewrite.",
     "expect": [
@@ -358,7 +358,7 @@
     "requires_model": true,
     "hard_fail": false,
     "fixture_paths": [
-      "_posts/2026-04-30-what-i-learned-breaking-the-writing-workflow.md"
+      "_posts/2026-04-30-a-writing-workflow-is-a-machine-for-saying-not-yet.md"
     ],
     "prompt": "Audit the supplied post's Mermaid diagram. Decide whether to keep, cut, or replace it. Do not draft new prose unless needed for the demo decision.",
     "expect": [
@@ -370,6 +370,74 @@
       "adds a second decorative visual",
       "rewrites the whole post",
       "does not make a decision"
+    ]
+  },
+  {
+    "id": "taste_hook_but_turn",
+    "stage": "hook_lab",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Rewrite this opening using the current taste guidance. Keep it short and do not draft the post: I tried to make the agent smarter. The answer was already sitting in Contacts.app.",
+    "expect": [
+      "uses a but-style turn or clear reversal",
+      "keeps the personal discovery",
+      "does not turn the opening into atmosphere or a full post"
+    ],
+    "fail_if": [
+      "returns only generic hook advice",
+      "drops Contacts.app",
+      "drafts the surrounding article"
+    ]
+  },
+  {
+    "id": "taste_simplify_heavy_demo",
+    "stage": "demo_decision",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Demo audit only. A writing-workflow post has a Mermaid graph with 10 nodes and many backtracking arrows. The useful idea is that gates can push weak work backward. Apply current taste guidance: should we keep, cut, or simplify? Do not draft the post.",
+    "expect": [
+      "chooses simplify rather than blindly keep or cut",
+      "keeps the backtracking/gate idea",
+      "explains the smaller job of the demo"
+    ],
+    "fail_if": [
+      "cuts the diagram only because it exposes process",
+      "keeps the heavy diagram unchanged",
+      "adds a new full post"
+    ]
+  },
+  {
+    "id": "taste_keep_reusable_prompt_demo",
+    "stage": "demo_decision",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Demo audit only. A post about writing counterexamples includes a reusable prompt block that asks Cursor to find bad-but-plausible behavior, missing gates, and eval cases. Apply current taste guidance: should this block stay? Do not draft the post.",
+    "expect": [
+      "keeps the prompt block",
+      "explains that it teaches what the reader can do next",
+      "does not replace it with generic prose"
+    ],
+    "fail_if": [
+      "cuts the prompt block because it is documentation",
+      "adds a decorative diagram instead",
+      "rewrites the whole article"
+    ]
+  },
+  {
+    "id": "taste_agent_operator_balance",
+    "stage": "zinsser_edit",
+    "requires_model": true,
+    "hard_fail": false,
+    "prompt": "Tighten this line using current taste guidance. Keep the agent/human balance implicit and return only the edited line: Not because Contacts.app is glamorous. Because it is already where the human work happens.",
+    "expect": [
+      "uses shared workspace or equivalent agent/operator language",
+      "does not overexplain the human role",
+      "returns only a concise edited line"
+    ],
+    "fail_if": [
+      "keeps where the human work happens unchanged",
+      "turns it into a paragraph about humans and agents",
+      "removes the Contacts.app contrast"
     ]
   }
 ]

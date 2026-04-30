@@ -1,10 +1,10 @@
 ---
-layout: post
+
+## layout: post
 title: "The Cuttlefish Problem"
 date: 2026-04-22
 description: "Why an alien intelligence lives in the ocean and what it means to think with your skin"
 tags: [cuttlefish, consciousness, biology]
----
 
 A cuttlefish can see polarized light. They dream in chromatophore pulses while resting on the seafloor. They pass the mirror test — not always, but more convincingly than most animals that try.
 

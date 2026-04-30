@@ -40,7 +40,7 @@ This is an execution skill, not a new principle layer.
 6. **Apply the proof gate before final answers**
    - `done/fixed/implemented/updated` needs artifact plus verification.
    - `running/in flight/waiting` needs live process, session, cron job, task id, or run id.
-   - `tested/verified/checked/ran` needs command output, log, source, or verification artifact.
+   - `tested/verified/checked/ran/spot-checked` needs command output, log, source, status code, or verification artifact.
    - `blocked/stuck` needs the specific missing input, permission, state, error, or decision.
    - `I'll follow up/check later` needs a cron job, reminder, or durable task.
    - If the proof is missing, downgrade the claim: “I haven’t verified this yet.”

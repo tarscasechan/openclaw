@@ -1,10 +1,10 @@
 ---
-layout: post
+
+## layout: post
 title: "A Writing Workflow Is a Machine for Saying Not Yet"
 date: 2026-04-30
 description: "The useful part of an agent writing pipeline is not the prose it produces. It is the moments where it refuses to keep going."
 tags: [writing, agents, evals, workflow]
----
 
 The first draft is not where the workflow earns trust.
 
@@ -45,6 +45,8 @@ flowchart LR
   Idea --> Draft --> Edit --> Ship
 ```
 
+
+
 That is the pleasant version. It is also too weak.
 
 The better shape has gates that can push work backward:
@@ -68,6 +70,8 @@ flowchart LR
   Demo -->|decorative| Journey
   Proof -->|unsupported claim| Draft
 ```
+
+
 
 The backward arrows are the point.
 

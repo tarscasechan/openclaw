@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "max_review_items": 8,
+  "categories": [
+    {
+      "id": "hook_truth_vs_cleverness",
+      "label": "Hook truth versus hook cleverness",
+      "concern": "The opening may be punchy without being genuinely inviting or true.",
+      "look_for": [
+        "first sentence or first paragraph",
+        "reversal hooks",
+        "clever aphorisms",
+        "openings that could fit many posts"
+      ],
+      "question": "How does this opening feel?",
+      "options": [
+        "Keep it: it opens real tension.",
+        "Warmer: it needs more lived friction.",
+        "Sharper: it needs a clearer turn.",
+        "Cut/rewrite: it feels like a slogan."
+      ]
+    },
+    {
+      "id": "personal_voice_vs_abstraction",
+      "label": "Personal voice versus abstraction",
+      "concern": "The passage may hide the speaker behind systems language.",
+      "look_for": [
+        "abstract nouns",
+        "users/people/the system where I/you/we may be better",
+        "personal claims without personal stance"
+      ],
+      "question": "What voice would make this better?",
+      "options": [
+        "Keep system-level.",
+        "Use I: make it more owned.",
+        "Use you: address the reader directly.",
+        "Use we: make it a shared problem."
+      ]
+    },
+    {
+      "id": "scaffold_leakage",
+      "label": "Scaffold leakage",
+      "concern": "The structure may feel like a workflow transcript instead of a post.",
+      "look_for": [
+        "visible framework language",
+        "sections that explain the pipeline instead of the idea",
+        "lists that feel like planning notes"
+      ],
+      "question": "Does this feel like natural prose or exposed scaffolding?",
+      "options": [
+        "Natural: keep it.",
+        "Mostly works, but soften the structure.",
+        "Too much scaffold: rewrite as prose.",
+        "Useful scaffold: keep because the process is the point."
+      ]
+    },
+    {
+      "id": "over_explanation",
+      "label": "Over-explanation",
+      "concern": "The post may keep proving a point after the reader already has it.",
+      "look_for": [
+        "repeated claims",
+        "long explanatory sections",
+        "three examples where one would work",
+        "conclusions that restate the whole post"
+      ],
+      "question": "Does this passage pull its weight?",
+      "options": [
+        "Keep: it earns the space.",
+        "Trim: the idea is right but too long.",
+        "Move: useful, but belongs elsewhere.",
+        "Cut: the reader already has it."
+      ]
+    },
+    {
+      "id": "demo_usefulness",
+      "label": "Demo usefulness",
+      "concern": "The diagram, code, or table may decorate instead of teaching faster than prose.",
+      "look_for": [
+        "Mermaid diagrams",
+        "tables",
+        "code blocks",
+        "ASCII flows"
+      ],
+      "question": "Does this demo earn its place?",
+      "options": [
+        "Keep: it teaches faster than prose.",
+        "Simplify: useful but too heavy.",
+        "Replace with prose.",
+        "Cut: it decorates."
+      ]
+    },
+    {
+      "id": "ending_quality",
+      "label": "Ending quality",
+      "concern": "The ending may summarize instead of landing.",
+      "look_for": [
+        "last paragraph",
+        "line I want to keep sections",
+        "final aphorisms",
+        "compressed terminal lines"
+      ],
+      "question": "How does this ending land?",
+      "options": [
+        "Lands: keep it.",
+        "Too compressed: give it one more beat.",
+        "Too summary-like: find a sharper final line.",
+        "Too clever: make it quieter."
+      ]
+    },
+    {
+      "id": "line_to_keep_detection",
+      "label": "Line-to-keep detection",
+      "concern": "A strange, compact, or alive line may be at risk of getting edited away.",
+      "look_for": [
+        "short standalone lines",
+        "surprising sentences",
+        "plain lines with rhythm",
+        "lines that sound like the author"
+      ],
+      "question": "Is this a line to protect?",
+      "options": [
+        "Protect it exactly.",
+        "Keep the idea, change the wording.",
+        "Good but not sacred.",
+        "No: it sounds over-shaped."
+      ]
+    }
+  ]
+}

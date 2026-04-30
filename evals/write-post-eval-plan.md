@@ -11,6 +11,7 @@ The eval should answer:
 - Does it preserve voice while improving prose?
 - Does it use personal pronouns when they make the writing feel owned or reader-facing?
 - Does it produce short, concrete hooks that open tension instead of generic summaries?
+- Does it apply recorded taste guidance without overfitting it into hard law?
 - Does it preserve author stake and lived friction through research, drafting, and editing?
 - Does it avoid invented research, citations, benchmarks, and fake progress?
 
@@ -131,7 +132,7 @@ Run these as fast unit checks. Run model cases on skill edits, model upgrades, a
 
 ## Minimum case set
 
-Start with 21 model-run cases:
+Start with 25 model-run cases:
 
 1. vague idea asks one focused question or states assumptions
 2. topic-only request returns angles, not a draft
@@ -154,6 +155,10 @@ Start with 21 model-run cases:
 19. existing post review returns a verdict and next slice, not a rewrite
 20. existing post edit preserves sparse voice
 21. existing post demo audit decides keep/cut/replace without drafting
+22. taste hook rewrite uses a turn instead of atmosphere
+23. heavy but useful demo is simplified instead of cut
+24. reusable prompt demo is kept because it teaches what to do next
+25. agent/operator phrasing keeps the balance implicit
 
 ## Acceptance bar
 
@@ -172,5 +177,5 @@ Hard-fail cases:
 ## Cadence
 
 - Run static and deterministic checks after every `write-post` skill edit.
-- Run the 21-case model smoke suite after meaningful skill changes or model changes.
+- Run the 25-case model smoke suite after meaningful skill changes or model changes.
 - Run a larger regression suite only after collecting real failures from chat transcripts.

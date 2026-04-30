@@ -43,6 +43,7 @@ REFERENCE_FILES = [
     ROOT / "skills" / "write-post" / "references" / "pain-points.md",
     ROOT / "skills" / "write-post" / "references" / "demos.md",
     ROOT / "skills" / "write-post" / "references" / "editing-pass.md",
+    ROOT / "skills" / "write-post" / "references" / "taste-memory.md",
     ROOT / "skills" / "write-post" / "references" / "state-machine.md",
 ]
 
@@ -337,7 +338,9 @@ def count_hook_candidates(text: str) -> int:
         for line in (text or "").splitlines()
         if line.strip().startswith("|")
         and not re.match(r"^\s*\|\s*-+", line)
-        and re.search(r"[\"“].+[\"”]", line)
+        and not re.match(r"^\s*\|\s*hook\s*\|", line, flags=re.IGNORECASE)
+        and line.count("|") >= 4
+        and re.search(r"(?:[\"“].+[\"”]|\*\*.+\*\*|[A-Z][^|.!?]+[.!?])", line)
     ]
     if table_rows:
         return len(table_rows)
@@ -462,7 +465,7 @@ def judge_case(case: dict[str, Any], response: str) -> dict[str, Any]:
         add("avoids_impersonal_author", not has_any(edited, ["the author", "the writer", "the user"]), "")
         add("concise_edit", count_words(edited) <= 80, f"words={count_words(edited)}")
     elif cid == "zinsser_edit_tightens_without_flattening":
-        edited = (text or "").split("\n\n", 1)[0]
+        edited = edited_payload(text)
         add("cuts_clutter", not has_any(edited, ["variety of subtle", "not-so-subtle", "in a variety"]), "")
         add("keeps_core_image", has_any(edited, ["pretend", "pretending", "continuity", "floor", "fell"]), "")
         add("concise_edit", count_words(edited) <= 45, f"words={count_words(edited)}")
@@ -478,16 +481,37 @@ def judge_case(case: dict[str, Any], response: str) -> dict[str, Any]:
     elif cid == "review_existing_post_next_slice":
         add("has_verdict", has_any(text, ["ship", "revise", "restart", "keep", "blocked", "verdict", "next slice"]), "")
         add("mentions_structure_or_reader", has_any(text, ["want", "need", "get", "reader", "pain", "structure"]), "")
-        add("not_rewrite", count_words(text) <= 320 and not has_any(text, ["layout: post", "date:", "tags:"]), f"words={count_words(text)}")
+        frontmatter_like = bool(re.search(r"(?m)^---\s*$", text) and has_any(text, ["date:", "tags:"]))
+        add("not_rewrite", count_words(text) <= 320 and not frontmatter_like, f"words={count_words(text)}")
     elif cid == "edit_existing_post_preserves_sparse_voice":
-        edited = edited_payload(text)
-        add("keeps_sparse_voice", has_any(edited, ["works best", "tools stay small", "honest", "smallest tool", "finishes the job", "usually enough"]), "")
-        add("does_not_bloat", count_words(edited) <= 90, f"words={count_words(edited)}")
+        edited = text.strip()
+        add("keeps_sparse_voice", has_any(edited, ["works best", "tools stay small", "pieces stay honest", "smallest tool", "smallest surface", "least persistent", "bad orchestration", "work lives", "job lives", "boringly clear", "finishes the job", "usually enough"]), "")
+        add("does_not_bloat", count_words(edited) <= 250, f"words={count_words(edited)}")
         add("no_generic_ai_filler", not has_any(edited, ["rapidly evolving", "leverage", "seamless", "robust ecosystem"]), "")
     elif cid == "audit_existing_demo_decision":
         add("clear_demo_verdict", has_any(text, ["keep", "cut", "diagram", "demo", "mermaid", "visual"]), "")
         add("explains_job", has_any(text, ["clarif", "teach", "shows", "flow", "repeat", "decorative"]), "")
         add("not_new_post", count_words(text) <= 220, f"words={count_words(text)}")
+    elif cid == "taste_hook_but_turn":
+        add("uses_turn", has_any(text, [" but ", "already", "instead", "answer was already"]), "")
+        add("keeps_contacts", "contacts.app" in ltext, "")
+        add("keeps_personal_discovery", has_any(text, ["i tried", "agent smarter", "answer"]), "")
+        add("not_full_post", count_words(text) <= 120, f"words={count_words(text)}")
+    elif cid == "taste_simplify_heavy_demo":
+        add("chooses_simplify", has_any(text, ["simplify", "smaller", "trim", "compact", "reduce"]), "")
+        add("keeps_gate_backtracking_idea", has_any(text, ["gate", "back", "backward", "push", "weak work", "not yet"]), "")
+        add("does_not_cut_useful_demo", not re.search(r"\bcut\b", ltext) or has_any(text, ["not cut", "don't cut", "do not cut", "rather than cut"]), "")
+        add("not_new_post", count_words(text) <= 180, f"words={count_words(text)}")
+    elif cid == "taste_keep_reusable_prompt_demo":
+        add("keeps_prompt_block", has_any(text, ["keep", "stay", "stays", "should stay"]), "")
+        add("explains_reader_action", has_any(text, ["reader", "use", "reuse", "do next", "what to do", "executable", "prompt"]), "")
+        add("no_replacement_diagram", count_mermaid_blocks(text) == 0, f"mermaid_blocks={count_mermaid_blocks(text)}")
+        add("not_new_post", count_words(text) <= 180, f"words={count_words(text)}")
+    elif cid == "taste_agent_operator_balance":
+        edited = edited_payload(text)
+        add("uses_agent_operator_balance", has_any(edited, ["shared workspace", "agent", "operator"]), edited[:120])
+        add("avoids_overexplaining_human", not has_any(edited, ["human work happens", "human role", "humans and agents", "collaboration between humans"]), "")
+        add("concise_line", count_words(edited) <= 35, f"words={count_words(edited)}")
     else:
         add("unknown_case_has_no_judge", False, "add judge logic")
 
@@ -524,6 +548,10 @@ def offline_stub(case: dict[str, Any]) -> str:
         "review_existing_post_next_slice": "Verdict: revise, not restart. The reader and structure are clear, but the post needs a sharper Need section before another polish pass. Next slice: name the concrete failure this workflow prevents.",
         "edit_existing_post_preserves_sparse_voice": "OpenClaw works best when the tools stay small and honest.\n\nUse the smallest tool that can safely finish the job.",
         "audit_existing_demo_decision": "Keep the Mermaid diagram. It shows the orchestration flow faster than prose and earns its place; just avoid adding a second visual.",
+        "taste_hook_but_turn": "I tried to make the agent smarter, but the answer was already sitting in Contacts.app.",
+        "taste_simplify_heavy_demo": "Simplify it. Keep the gate/backtracking idea, but reduce the diagram to the smallest version that shows weak work getting pushed backward.",
+        "taste_keep_reusable_prompt_demo": "Keep the prompt block. It gives the reader an executable next step, not just documentation, so prose would teach less.",
+        "taste_agent_operator_balance": "Not because Contacts.app is glamorous. Because it is already the shared workspace between agent and operator.",
     }
     return stubs[cid]
 

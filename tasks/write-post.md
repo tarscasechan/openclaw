@@ -37,6 +37,7 @@ Builders first. General readers second.
 - Use want / need / get early.
 - Treat want / need / get as planning scaffolding, not literal post-body headings.
 - Use personal pronouns when they make the post feel owned or directly useful.
+- Use `skills/write-post/references/taste-memory.md` as medium-confidence guidance for hooks, demos, metaphors, and agent/operator phrasing.
 - Restart from concept if the pain point is weak.
 - Add demos only when they clarify the core conceit.
 - Keep prose brief and human.
@@ -48,7 +49,7 @@ Builders first. General readers second.
 
 - Current status: parent skill now has explicit startup checks, stage gates, output standards, and reference-backed handoffs.
 - Modular composition implemented: ideate-topic, research-pain-points, package-topic, draft-post-from-brief, add-graphs-and-figures, humanity-edit, zinsser-editing, generate-image-for-post, with write-post as orchestrator.
-- Eval status: 21-case suite now covers voice contract, hooks, author stake, reader journey, demo planning, and post-Zinsser warmth; rerun after this chain change.
+- Eval status: suite covers voice contract, hooks, author stake, reader journey, demo planning, post-Zinsser warmth, and taste-memory behaviors; rerun after this taste-memory change.
 
 ## Decisions
 - Default writing/eval model: `openai-codex/gpt-5.5`.

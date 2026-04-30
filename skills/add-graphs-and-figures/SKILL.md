@@ -28,6 +28,8 @@ Plan and add demonstrations that teach faster than prose.
 - Reject a graph for a single clear sentence unless the visual adds a new relationship.
 - When the user asks for a specific multi-step flow, a single compact Mermaid diagram is usually the right demo.
 - Prefer Mermaid for system flows. Use ASCII only when the target format cannot render Mermaid.
+- Keep reusable prompt blocks and compact decision trees when they teach the reader what to do next.
+- If a diagram has the right relationship but feels process-heavy, simplify it before cutting it.
 - For demo-plan requests, return the plan and the reason. Do not create the demo yet.
 - For demo-execution requests, answer with either one demo or a short "skip it" decision. Do not draft the surrounding article.
 - If the demo does not clarify the conceit, leave it out.

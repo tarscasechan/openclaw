@@ -1,10 +1,11 @@
 ---
-layout: post
+
+## layout: post
+
 title: "Cursor Should Write the Counterexample"
 date: 2026-04-30
 description: "The best use of Cursor for agent skills is not polish. It is turning vague instructions into failures the workflow can catch."
 tags: [cursor, agents, skills, evals]
----
 
 Do not ask Cursor to improve the skill.
 
@@ -75,18 +76,22 @@ flowchart LR
   Run -->|passes| Keep[Keep as regression]
 ```
 
+
+
 The counterexample is the hinge.
 
 Without it, a rule stays abstract. With it, you can turn taste into a tripwire.
 
 For example:
 
-| Soft rule | Counterexample | Gate |
-| --- | --- | --- |
-| “Report progress honestly.” | Agent says “still running” after the process died. | Running claims require process id, cron job, task id, or live session. |
-| “Use the full writing pipeline.” | Agent preserves the old premise and only smooths sentences. | Rewrite must change angle/hook/journey or explicitly justify preserving them. |
-| “Verify correctness.” | Agent says “tested” after visual inspection only. | Tested claims require command output, log, artifact, screenshot, or named blocker. |
-| “Recover after timeout.” | Agent restarts from scratch and loses prior work. | Task file must record last completed stage, blocker, and next action. |
+
+| Soft rule                        | Counterexample                                              | Gate                                                                               |
+| -------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| “Report progress honestly.”      | Agent says “still running” after the process died.          | Running claims require process id, cron job, task id, or live session.             |
+| “Use the full writing pipeline.” | Agent preserves the old premise and only smooths sentences. | Rewrite must change angle/hook/journey or explicitly justify preserving them.      |
+| “Verify correctness.”            | Agent says “tested” after visual inspection only.           | Tested claims require command output, log, artifact, screenshot, or named blocker. |
+| “Recover after timeout.”         | Agent restarts from scratch and loses prior work.           | Task file must record last completed stage, blocker, and next action.              |
+
 
 This is the work Cursor is good at because it can sit next to the editor and keep asking the annoying question: what would failure look like here?
 

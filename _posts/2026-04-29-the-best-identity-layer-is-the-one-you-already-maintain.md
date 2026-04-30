@@ -1,10 +1,10 @@
 ---
-layout: post
+
+## layout: post
 title: "The Best Identity Layer Is the One You Already Maintain"
 date: 2026-04-29
 description: "For a personal agent, Contacts.app is boring in exactly the right way."
 tags: [contacts, macos, automation]
----
 
 I tried to make the agent smarter. The answer was already sitting in Contacts.app.
 
@@ -60,6 +60,8 @@ flowchart LR
   Resolver --> Msg[BlueBubbles]
   Resolver --> Policy[Known-contact policy]
 ```
+
+
 
 Contacts.app remains the source. The local cache becomes the working copy. The resolver turns a name, email, or phone number into the handle a channel needs.
 

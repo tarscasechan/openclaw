@@ -9,7 +9,7 @@ description: Orchestrate blog-post writing from rough idea to publishable draft.
 
 Turn an idea into a builder-first post with a strong angle, real reader pain, useful demonstrations, and lean prose.
 
-This is an orchestrator skill. Compose the child skills; do not hide the whole workflow inside one pass. Use `references/state-machine.md` for stage transitions, `references/voice-contract.md` for speaker/reader stance, `references/hooks.md` for first-sentence craft, and `references/reader-journey.md` to translate structure into prose. Use **Seek Truth** for claims and progress reports, and **Resilient Work** for state and resume behavior.
+This is an orchestrator skill. Compose the child skills; do not hide the whole workflow inside one pass. Use `references/state-machine.md` for stage transitions, `references/voice-contract.md` for speaker/reader stance, `references/hooks.md` for first-sentence craft, `references/reader-journey.md` to translate structure into prose, and `references/taste-memory.md` for confirmed taste preferences. Use **Seek Truth** for claims and progress reports, and **Resilient Work** for state and resume behavior.
 
 ## Start every run
 
@@ -29,7 +29,7 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
 2. **Ideate** with `ideate-topic`.
    Gate: the angle names a concrete reader, tension, and reason it matters now. If the pain is vague, restart from concept.
 3. **Run hook lab** with `references/hooks.md`.
-   Gate: generate 3-5 short first-sentence candidates tied to hook type and reader tension. Pick one working hook before drafting.
+   Gate: generate 3-5 short first-sentence candidates tied to hook type and reader tension. Pick one working hook before drafting. Prefer hooks with a turn over atmospheric openings when the piece has a personal discovery or systems reversal.
 4. **Research pain points** with `research-pain-points`.
    Gate: collect failures, costs, objections, attempted workarounds, and author stake when available. Prefer direct evidence over generic market claims.
 5. **Package** with `package-topic` and `references/want-need-get.md`.
@@ -37,7 +37,7 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
 6. **Build the reader journey** with `references/reader-journey.md`.
    Gate: translate Want/Need/Get into natural beats: hook, friction, turn, mechanism, tradeoff, landing. Do not draft until the reading path feels human.
 7. **Plan demonstrations** with `add-graphs-and-figures` and `references/demos.md`.
-   Gate: decide `none`, `Mermaid`, `code`, `before/after`, `table`, or `image` before drafting. Do not force a visual.
+   Gate: decide `none`, `Mermaid`, `code`, `before/after`, `table`, or `image` before drafting. Do not force a visual. If the demo teaches but feels heavy, simplify it before cutting it.
 8. **Draft** with `draft-post-from-brief`.
    Gate: the draft follows the reader journey, opens with a real hook, and stays readable without over-polish. It must not include literal `Want`, `Need`, or `Get` headings unless the user explicitly asks for the brief itself. If the brief is weak, stop; do not fill it with assumptions and draft anyway.
 9. **Execute demonstrations** with `add-graphs-and-figures` only when they teach faster than prose.
@@ -47,7 +47,7 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
 11. **Zinsser edit** with `zinsser-editing` and `references/editing-pass.md`.
    Gate: cut clutter without sanding off the voice.
 12. **Read-aloud pass** with `references/editing-pass.md`.
-   Gate: the piece still has rhythm, warmth, concrete texture, and an owned point of view after tightening.
+   Gate: the piece still has rhythm, warmth, concrete texture, an owned point of view, and the useful turns or metaphors that carry the argument after tightening.
 13. **Image pass** with `generate-image-for-post` only if a visual clarifies the core idea better than text or a diagram.
 
 ## Rules
@@ -57,9 +57,12 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
 - Restart from concept if ideation, reader pain, or the want/need/get structure is weak.
 - Treat want/need/get as planning structure. Translate it into natural prose for the post body.
 - Keep voice, hook, and structure connected. Do not let a clean framework erase the speaker.
+- Use `references/taste-memory.md` as medium-confidence guidance. Apply it, but do not turn one review answer into a universal prohibition.
 - If a gate fails, stop at that gate. Do not produce the downstream artifact in the same response.
-- Keep demos earned, not decorative.
+- Keep demos earned, not decorative. Preserve useful prompt blocks and decision trees; simplify heavy diagrams before cutting them.
 - Keep prose brief and human.
+- Prefer exact hook wording when a small article or turn changes the point.
+- When writing about agent/human collaboration, keep the balance present without overexplaining it. For direct line edits in the personal-agent identity family, prefer `shared workspace between agent and operator` over vague phrases like `where the work happens`.
 - Use personal pronouns when they make the piece feel owned or directly useful. Do not hide behind impersonal nouns like "the author" or "users" when `I`, `you`, or `we` would be truer.
 - Preserve the user's voice when editing existing prose. Improve the piece; do not replace it with generic polish.
 - For factual or technical claims, verify or mark uncertainty. Do not invent citations, benchmarks, customer pain, or product behavior.

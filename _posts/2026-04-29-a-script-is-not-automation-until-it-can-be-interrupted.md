@@ -1,10 +1,11 @@
 ---
-layout: post
+
+## layout: post
+
 title: "A Script Is Not Automation Until It Can Be Interrupted"
 date: 2026-04-29
 description: "Crash-resistant automation comes from state, slices, dry runs, and boring recovery paths."
 tags: [automation, reliability, launchd]
----
 
 The happy path is not the automation.
 
@@ -44,6 +45,8 @@ flowchart LR
   DryRun -. inspect .-> Send
   Record -. audit .-> Resolve
 ```
+
+
 
 Each box should be able to fail without making the whole system mysterious.
 

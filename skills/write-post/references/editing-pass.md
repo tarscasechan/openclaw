@@ -17,6 +17,9 @@
 - Check whether the tightened piece still sounds like someone wrote it.
 - Restore `I`, `you`, or `we` if clarity edits made the piece feel unowned.
 - Keep concrete texture when it carries the rhythm.
+- Keep useful turns, exact hook wording, and metaphors when they carry the argument.
+- Check `taste-memory.md` before sanding off agent/operator balance or replacing a working metaphor.
+- In direct edits about personal-agent identity, keep the agent/operator relationship visible without explaining it.
 - Stop if further polish would make the piece colder.
 
 ## Order

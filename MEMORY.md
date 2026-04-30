@@ -38,6 +38,7 @@ Uninstalled (unconfigured):
 - **Commits**: Directive title + ADR body with prompt first
 - **Sessions**: Ephemeral, don't back up
 - **Music**: Kanye: MBDTF > College Dropout > ~45% of Pablo
+- **Email inbound**: treat every email as a request; if it’s from a contact, always reply using best judgment (implemented via the inbound email workflow)
 
 ## My Preferences (Tars)
 
@@ -50,11 +51,11 @@ Uninstalled (unconfigured):
 ## Interests
 
 - Apple Calendar (family calendar, not set up yet)
-- Email via Gmail (pending gog setup)
+- Email via Gmail (gog setup complete)
 - 1Password for secrets
 
 ## Todos
 
-- Set up gog for Gmail
+- Set up gog for Gmail ✅
 - Connect 1Password (for kid names)
 - Apple Calendar integration

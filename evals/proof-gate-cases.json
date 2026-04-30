@@ -1,0 +1,62 @@
+[
+  {
+    "id": "done_without_evidence_fails",
+    "text": "Done — I fixed it.",
+    "expect_ok": false,
+    "expect_codes": ["unsupported_done"]
+  },
+  {
+    "id": "done_with_evidence_passes",
+    "text": "Done. Evidence: `python3 scripts/proof-gate-eval.py` exited 0 and wrote `logs/proof-gate/latest.json`.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "running_without_job_fails",
+    "text": "The eval is still running in the background.",
+    "expect_ok": false,
+    "expect_codes": ["unsupported_running"]
+  },
+  {
+    "id": "running_with_process_passes",
+    "text": "The eval is running as process `clear-ember`, pid 26113.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "tested_without_output_fails",
+    "text": "I tested it and everything passed.",
+    "expect_ok": false,
+    "expect_codes": ["unsupported_tested"]
+  },
+  {
+    "id": "tested_with_output_passes",
+    "text": "Tested. Test output: 8 cases passed, 0 failed.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "blocked_without_specifics_fails",
+    "text": "I’m blocked for now.",
+    "expect_ok": false,
+    "expect_codes": ["unsupported_blocked"]
+  },
+  {
+    "id": "blocked_with_missing_input_passes",
+    "text": "Blocked because the OAuth client secret is missing from `credentials/google-oauth-desktop.json`.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "future_followup_without_job_fails",
+    "text": "I’ll check back later and keep an eye on it.",
+    "expect_ok": false,
+    "expect_codes": ["unsupported_followup"]
+  },
+  {
+    "id": "future_followup_with_cron_passes",
+    "text": "I scheduled cron job `proof-gate-minute-eval` to check back every minute.",
+    "expect_ok": true,
+    "expect_codes": []
+  }
+]

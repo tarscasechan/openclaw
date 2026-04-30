@@ -36,6 +36,7 @@ CHILD_SKILLS = [
 ]
 
 REFERENCE_FILES = [
+    ROOT / "skills" / "write-post" / "references" / "contracts.md",
     ROOT / "skills" / "write-post" / "references" / "voice-contract.md",
     ROOT / "skills" / "write-post" / "references" / "hooks.md",
     ROOT / "skills" / "write-post" / "references" / "want-need-get.md",
@@ -46,6 +47,25 @@ REFERENCE_FILES = [
     ROOT / "skills" / "write-post" / "references" / "taste-memory.md",
     ROOT / "skills" / "write-post" / "references" / "state-machine.md",
 ]
+
+OPERATIONAL_DOCS = [
+    ROOT / "skills" / "write-post" / "SKILL.md",
+    ROOT / "tasks" / "write-post.md",
+    ROOT / "evals" / "write-post-cases.json",
+    ROOT / "evals" / "write-post-eval-plan.md",
+]
+
+ARTIFACT_SKILL_SLUGS = ["seek-truth", "resilient-work", "resiliant"]
+
+DUPLICATE_REFERENCE_FILES = [
+    ROOT / "skills" / "research-pain-points" / "references" / "pain-points.md",
+    ROOT / "skills" / "add-graphs-and-figures" / "references" / "demos.md",
+    ROOT / "skills" / "humanity-edit" / "references" / "editing-pass.md",
+    ROOT / "skills" / "package-topic" / "references" / "want-need-get.md",
+    ROOT / "skills" / "zinsser-editing" / "references" / "want-need-get.md",
+]
+
+QUALITY_SCORE_THRESHOLD = 4
 
 
 @dataclass
@@ -138,6 +158,25 @@ def static_checks() -> dict[str, Any]:
     for path in REFERENCE_FILES:
         checks.append(Check(f"reference:{path.name}", path.exists(), str(path.relative_to(ROOT))))
 
+    artifact_skill_dirs = [slug for slug in ("seek-truth", "resilient-work") if (ROOT / "skills" / slug).exists()]
+    checks.append(Check("artifact_skill_dirs_removed", not artifact_skill_dirs, "present=" + ", ".join(artifact_skill_dirs)))
+
+    dead_refs: list[str] = []
+    docs_to_scan = list(OPERATIONAL_DOCS)
+    docs_to_scan.extend(ROOT / "skills" / child / "SKILL.md" for child in CHILD_SKILLS)
+    docs_to_scan.extend(REFERENCE_FILES)
+    for path in docs_to_scan:
+        if not path.exists():
+            continue
+        text = path.read_text()
+        for slug in ARTIFACT_SKILL_SLUGS:
+            if slug in text:
+                dead_refs.append(f"{path.relative_to(ROOT)}:{slug}")
+    checks.append(Check("no_artifact_skill_references", not dead_refs, "refs=" + ", ".join(dead_refs)))
+
+    duplicate_refs = [str(path.relative_to(ROOT)) for path in DUPLICATE_REFERENCE_FILES if path.exists()]
+    checks.append(Check("duplicate_reference_files_removed", not duplicate_refs, "present=" + ", ".join(duplicate_refs)))
+
     cases_ok = True
     case_detail = ""
     try:
@@ -155,7 +194,19 @@ def static_checks() -> dict[str, Any]:
             for fixture_path in case.get("fixture_paths", [])
             if not (ROOT / fixture_path).exists()
         ]
-        cases_ok = not dupes and not missing_keys and not missing_fixtures
+        quality_cases = [case for case in cases if case.get("quality_judge")]
+        malformed_quality = [
+            case.get("id", f"index_{idx}")
+            for idx, case in enumerate(cases)
+            if case.get("quality_judge")
+            and not (
+                isinstance(case.get("quality_rubric"), list)
+                and len(case.get("quality_rubric", [])) >= 3
+                and all(isinstance(item, str) and item.strip() for item in case.get("quality_rubric", []))
+            )
+        ]
+        quality_count_ok = 5 <= len(quality_cases) <= 7
+        cases_ok = not dupes and not missing_keys and not missing_fixtures and not malformed_quality and quality_count_ok
         case_detail = f"{len(cases)} cases"
         if dupes:
             case_detail += f"; duplicate ids={dupes}"
@@ -163,6 +214,10 @@ def static_checks() -> dict[str, Any]:
             case_detail += f"; missing keys={missing_keys}"
         if missing_fixtures:
             case_detail += f"; missing fixtures={missing_fixtures}"
+        if malformed_quality:
+            case_detail += f"; malformed quality cases={malformed_quality}"
+        if not quality_count_ok:
+            case_detail += f"; quality cases={len(quality_cases)} expected 5-7"
     except Exception as exc:
         cases_ok = False
         case_detail = repr(exc)
@@ -211,6 +266,106 @@ def build_prompt(case: dict[str, Any]) -> str:
         "User request:\n"
         f"{case['prompt']}\n"
     )
+
+
+def build_quality_judge_prompt(case: dict[str, Any], response: str) -> str:
+    rubric = case.get("quality_rubric") or [
+        "The response satisfies the user's requested stage.",
+        "The response preserves meaning and avoids unsupported claims.",
+        "The response follows the skill's voice, structure, and output constraints.",
+    ]
+    return (
+        "You are judging one output from the OpenClaw write-post skill.\n"
+        "Score only the response quality for this case. Do not rewrite the response.\n"
+        "Use the rubric and the expect/fail_if fields as the source of truth.\n"
+        "Return strict JSON only, with keys: ok (boolean), score (integer 1-5), rationale (string), failures (array of strings).\n"
+        f"Passing requires score >= {QUALITY_SCORE_THRESHOLD}, no fail_if violation, and no major rubric miss.\n\n"
+        f"Case id: {case['id']}\n"
+        f"Stage: {case['stage']}\n"
+        f"User prompt:\n{case['prompt']}\n\n"
+        "Expect:\n"
+        + "\n".join(f"- {item}" for item in case.get("expect", []))
+        + "\n\nFail if:\n"
+        + "\n".join(f"- {item}" for item in case.get("fail_if", []))
+        + "\n\nQuality rubric:\n"
+        + "\n".join(f"- {item}" for item in rubric)
+        + "\n\nAssistant response:\n"
+        f"{response}\n"
+    )
+
+
+def parse_json_object(text: str) -> dict[str, Any] | None:
+    try:
+        value = json.loads(text)
+        return value if isinstance(value, dict) else None
+    except Exception:
+        pass
+    match = re.search(r"\{.*\}", text or "", flags=re.DOTALL)
+    if not match:
+        return None
+    try:
+        value = json.loads(match.group(0))
+        return value if isinstance(value, dict) else None
+    except Exception:
+        return None
+
+
+def run_quality_judge(case: dict[str, Any], response: str, args: argparse.Namespace) -> dict[str, Any]:
+    if args.offline:
+        return {
+            "ok": True,
+            "score": 5,
+            "rationale": "Offline stub output is treated as known-good harness fixture.",
+            "failures": [],
+            "offline": True,
+            "model": None,
+        }
+
+    judge_args = argparse.Namespace(**vars(args))
+    judge_args.model = args.quality_model or args.model
+    judge_args.fallback_model = args.quality_fallback_model or []
+    model_result = run_model(build_quality_judge_prompt(case, response), judge_args)
+    if not model_result.get("ok"):
+        return {
+            "ok": False,
+            "score": 0,
+            "rationale": model_result.get("error") or "quality judge provider failed",
+            "failures": ["quality judge provider failed"],
+            "offline": False,
+            "model": model_result.get("model"),
+            "attempts": model_result.get("attempts", []),
+        }
+
+    parsed = parse_json_object(model_result.get("text", ""))
+    if not parsed:
+        return {
+            "ok": False,
+            "score": 0,
+            "rationale": "quality judge did not return parseable JSON",
+            "failures": ["unparseable quality judge response"],
+            "raw": model_result.get("text", ""),
+            "offline": False,
+            "model": model_result.get("model"),
+            "attempts": model_result.get("attempts", []),
+        }
+
+    try:
+        score = int(parsed.get("score", 0))
+    except Exception:
+        score = 0
+    failures = parsed.get("failures") if isinstance(parsed.get("failures"), list) else []
+    ok_value = parsed.get("ok")
+    ok = bool(ok_value) and score >= QUALITY_SCORE_THRESHOLD and not failures
+    return {
+        "ok": ok,
+        "score": score,
+        "rationale": str(parsed.get("rationale", "")),
+        "failures": [str(item) for item in failures],
+        "offline": False,
+        "model": model_result.get("model"),
+        "attempts": model_result.get("attempts", []),
+        "raw": parsed,
+    }
 
 
 def extract_text_from_json(value: Any) -> str:
@@ -512,6 +667,21 @@ def judge_case(case: dict[str, Any], response: str) -> dict[str, Any]:
         add("uses_agent_operator_balance", has_any(edited, ["shared workspace", "agent", "operator"]), edited[:120])
         add("avoids_overexplaining_human", not has_any(edited, ["human work happens", "human role", "humans and agents", "collaboration between humans"]), "")
         add("concise_line", count_words(edited) <= 35, f"words={count_words(edited)}")
+    elif cid == "contract_progress_claim_requires_proof":
+        unsupported_live_claim = (
+            has_any(text, ["status: running", "stage: running", "currently running", "still running", "waiting on", "waiting for"])
+            or (
+                has_any(text, ["in flight"])
+                and not has_any(text, ["without proof", "can't report", "cannot report", "not verified", "nothing active", "not active"])
+            )
+        )
+        add("does_not_claim_running", not unsupported_live_claim, "")
+        add("marks_missing_proof", has_any(text, ["not verified", "haven't verified", "no proof", "no live", "without proof", "blocked", "missing"]), "")
+        add("names_needed_evidence", has_any(text, ["process", "task", "log", "artifact", "state", "verification", "receipt"]), "")
+    elif cid == "contract_task_file_is_state_not_doctrine":
+        add("treats_task_as_state", has_any(text, ["state", "current stage", "next slice", "resume", "demo decision"]), "")
+        add("does_not_restart", not has_any(text, ["start over", "restart ideation", "restart from voice", "ignore the task file"]), "")
+        add("does_not_treat_as_doctrine", not has_any(text, ["task file is doctrine", "canonical instruction", "taste law"]), "")
     else:
         add("unknown_case_has_no_judge", False, "add judge logic")
 
@@ -552,6 +722,8 @@ def offline_stub(case: dict[str, Any]) -> str:
         "taste_simplify_heavy_demo": "Simplify it. Keep the gate/backtracking idea, but reduce the diagram to the smallest version that shows weak work getting pushed backward.",
         "taste_keep_reusable_prompt_demo": "Keep the prompt block. It gives the reader an executable next step, not just documentation, so prose would teach less.",
         "taste_agent_operator_balance": "Not because Contacts.app is glamorous. Because it is already the shared workspace between agent and operator.",
+        "contract_progress_claim_requires_proof": "I have not verified live progress. To claim progress, I need a process, task state, log, or artifact. Current status: blocked on proof.",
+        "contract_task_file_is_state_not_doctrine": "Resume from the task file as state: current stage is demo decision, next slice is deciding whether the draft needs a diagram. Continue there; the task file is state, not doctrine.",
     }
     return stubs[cid]
 
@@ -601,7 +773,11 @@ def run_cases(args: argparse.Namespace) -> dict[str, Any]:
             )
             break
         judge = judge_case(case, response)
-        ok = bool(model_result.get("ok") and judge["ok"])
+        quality_result = None
+        if args.quality_judge and case.get("quality_judge"):
+            quality_result = run_quality_judge(case, response, args)
+        quality_ok = True if quality_result is None else bool(quality_result.get("ok"))
+        ok = bool(model_result.get("ok") and judge["ok"] and quality_ok)
         results.append(
             {
                 "id": case["id"],
@@ -618,10 +794,13 @@ def run_cases(args: argparse.Namespace) -> dict[str, Any]:
                 },
                 "response": response,
                 "judge": judge,
+                "quality_judge": quality_result,
             }
         )
     failures = [item for item in results if not item["ok"]]
     hard_failures = [item for item in failures if item.get("hard_fail")]
+    quality_results = [item for item in results if item.get("quality_judge") is not None]
+    quality_failures = [item for item in quality_results if not item["quality_judge"].get("ok")]
     return {
         "ok": not failures,
         "total": len(selected),
@@ -629,22 +808,36 @@ def run_cases(args: argparse.Namespace) -> dict[str, Any]:
         "passed": len(results) - len(failures),
         "failures": failures,
         "hard_failures": hard_failures,
+        "quality_total": len([case for case in selected if case.get("quality_judge")]),
+        "quality_ran": len(quality_results),
+        "quality_passed": len(quality_results) - len(quality_failures),
+        "quality_failures": quality_failures,
         "provider_failures": provider_failures,
         "results": results,
         "offline": bool(args.offline),
         "model": None if args.offline else args.model,
+        "quality_judge_enabled": bool(args.quality_judge),
+        "quality_model": None if args.offline or not args.quality_judge else (args.quality_model or args.model),
     }
 
 
 def build_state(report: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
     model = report.get("model_cases") or {}
     status = "passing" if report["ok"] else "failing"
+    if args.static_only:
+        status = "static_only_incomplete" if report["static"]["ok"] else "static_failing"
     if args.offline:
         status = "harness_passing" if report["ok"] else "harness_failing"
     next_step = "run model suite after provider is available" if args.offline else "repair first failing write-post eval"
+    if args.static_only:
+        next_step = "run non-static model suite before making behavioral claims"
     if report["ok"] and not args.offline:
         next_step = "keep suite as regression guard for skill/model changes"
+    if args.static_only and report["static"]["ok"]:
+        next_step = "run non-static model suite before making behavioral claims"
     blocker = None if report["ok"] else "write-post eval failed"
+    if args.static_only and report["static"]["ok"]:
+        blocker = "behavioral eval not run"
     if model.get("provider_failures"):
         first = model["provider_failures"][0]
         blocker = first.get("error") or "model provider failed"
@@ -658,6 +851,8 @@ def build_state(report: dict[str, Any], args: argparse.Namespace) -> dict[str, A
         "static_ok": report["static"]["ok"],
         "model_total": model.get("total", 0),
         "model_passed": model.get("passed", 0),
+        "quality_total": model.get("quality_total", 0),
+        "quality_passed": model.get("quality_passed", 0),
         "hard_failures": len(model.get("hard_failures", [])),
         "offline": bool(args.offline),
         "evidence": [str(LOG_DIR / "latest.json"), str(LOG_DIR / "history.jsonl")],
@@ -677,6 +872,9 @@ def update_task_file(report: dict[str, Any], state: dict[str, Any]) -> None:
         f"Model cases: {model.get('passed', 0)}/{model.get('total', 0)} passed"
         f" ({model.get('ran', 0)} ran)"
         f"{' (offline harness)' if state['offline'] else ''}\n"
+        f"Quality judge: {model.get('quality_passed', 0)}/{model.get('quality_total', 0)} passed"
+        f"{' (enabled)' if model.get('quality_judge_enabled') else ' (not enabled)'}\n"
+        f"Behavioral completeness: {'not run' if model.get('total', 0) == 0 else 'run'}\n"
         f"Hard failures: {state['hard_failures']}\n"
         f"Next slice: {state['next_step']}\n"
         f"Blocker: {state['blocker'] or 'none'}\n\n"
@@ -690,6 +888,8 @@ def update_task_file(report: dict[str, Any], state: dict[str, Any]) -> None:
         "Acceptance:\n"
         "- static checks pass\n"
         "- deterministic checks pass\n"
+        "- behavioral claims require a non-static run with model cases\n"
+        "- qualitative claims require `--quality-judge` on selected high-signal cases\n"
         "- at least 80% of selected model-run cases pass\n"
         "- no hard-fail case fails\n"
     )
@@ -781,6 +981,14 @@ def main() -> int:
     parser.add_argument("--timeout", type=int, default=180, help="Timeout per model case in seconds.")
     parser.add_argument("--max-cases", type=int, default=0, help="Run only the first N selected cases.")
     parser.add_argument("--case", action="append", default=[], help="Run a specific case id. May be repeated.")
+    parser.add_argument("--quality-judge", action="store_true", help="Run rubric-based LLM quality judging for selected cases.")
+    parser.add_argument("--quality-model", default="", help="Model id for the quality judge. Defaults to --model.")
+    parser.add_argument(
+        "--quality-fallback-model",
+        action="append",
+        default=[],
+        help="Fallback model id for quality judge calls. May be repeated.",
+    )
     parser.add_argument("--json", action="store_true", help="Print full JSON report.")
     args = parser.parse_args()
     if args.local:
@@ -791,9 +999,11 @@ def main() -> int:
     if static["ok"] and not args.static_only:
         model_cases = run_cases(args)
 
+    behavioral_complete = bool(args.static_only or model_cases["total"] > 0)
     min_pass = 0 if args.static_only else ((model_cases["total"] * 4 + 4) // 5)
     report_ok = bool(
         static["ok"]
+        and behavioral_complete
         and model_cases["passed"] >= min_pass
         and not model_cases.get("hard_failures")
         and not model_cases.get("provider_failures")
@@ -806,6 +1016,8 @@ def main() -> int:
         "acceptance": {
             "min_pass": min_pass,
             "no_hard_failures": len(model_cases.get("hard_failures", [])) == 0,
+            "behavioral_complete": behavioral_complete,
+            "static_only": bool(args.static_only),
         },
     }
 
@@ -828,13 +1040,18 @@ def main() -> int:
         print(json.dumps(report, indent=2, sort_keys=True))
     else:
         mode = "static" if args.static_only else ("offline" if args.offline else f"model={args.model}")
+        outcome = "STATIC ONLY" if args.static_only and report["static"]["ok"] else ("PASS" if report["ok"] else "FAIL")
         print(
             "write-post: "
-            f"{'PASS' if report['ok'] else 'FAIL'} | mode={mode} | "
+            f"{outcome} | mode={mode} | "
             f"static_failures={len(static['failures'])} | "
             f"model_passed={model_cases['passed']}/{model_cases['total']} | "
             f"hard_failures={len(model_cases.get('hard_failures', []))}"
         )
+        if args.quality_judge:
+            print(f"quality_judge={model_cases.get('quality_passed', 0)}/{model_cases.get('quality_total', 0)}")
+        if args.static_only and report["static"]["ok"]:
+            print("behavioral_status=incomplete model cases were not run")
         if model_cases.get("provider_failures"):
             first = model_cases["provider_failures"][0]
             print(f"provider_failure={first['id']} {first.get('error', '')}".rstrip())

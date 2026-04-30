@@ -9,6 +9,8 @@ description: Write a first draft from a brief. Use when a post has a clear struc
 
 Turn a brief into a readable draft.
 
+Canonical structure lives in `../write-post/references/reader-journey.md` and `../write-post/references/want-need-get.md`. This skill is the drafting leaf: return draft prose only.
+
 ## Rules
 
 - Draft only from a strong brief.

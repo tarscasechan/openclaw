@@ -48,16 +48,21 @@ Use three layers.
    - Ensure child skill names and reference files exist.
    - Ensure the description contains trigger terms: write, draft, revise, review, finish, blog post, article.
    - Ensure `references/state-machine.md` exists so orchestration, gates, and resume behavior have an explicit transition model.
+- Ensure `references/contracts.md` exists and no operational docs still point at deleted artifact skills.
+- Ensure duplicate doctrine references under child skill folders are removed or replaced by canonical references.
 
 2. Deterministic behavioral checks
    - Scan responses for forbidden claims without proof.
    - Check required output sections or phrases for staged cases.
    - Check that state files are read/updated when the case requires durable state.
    - Check that the model does not include decorative demos/images when the prompt says prose is enough.
+- Treat `model_total == 0` as incomplete for behavioral claims, even when static checks pass.
 
 3. Model-run judged checks
    - Run the underlying model for each writing stage.
    - Use a separate judge model or human rubric for quality properties that regex cannot score: angle strength, reader pain, voice preservation, useful demos, and over-polish.
+   - `scripts/write-post-eval.py --quality-judge` runs the separate rubric judge for selected high-signal cases marked with `quality_judge: true`.
+   - Quality-judge cases must carry an explicit `quality_rubric` so the judge is not guessing the standard from keywords.
 
 ## Stages that must hit the underlying model
 
@@ -126,13 +131,28 @@ These do not need a full model run for every commit:
 - linked reference existence
 - task/log path conventions
 - proof-gate claim discipline
+- quality case count and rubric shape
 - output contract presence for blocker/progress cases
 
 Run these as fast unit checks. Run model cases on skill edits, model upgrades, and scheduled smoke tests.
 
+## Quality Judge Lane
+
+The quality judge lane is intentionally small. It covers high-signal cases where regex checks are too weak:
+
+- hook quality
+- reader-journey draft naturalness
+- humanity edit voice preservation
+- Zinsser warmth preservation
+- sparse-voice line editing
+- existing-demo audit judgment
+- heavy-demo simplification taste
+
+Use it for meaningful skill edits, taste-rule changes, or model changes. A full run without `--quality-judge` still tests structure and coarse behavior, but should not be used as proof of qualitative improvement.
+
 ## Minimum case set
 
-Start with 25 model-run cases:
+Start with 27 model-run cases:
 
 1. vague idea asks one focused question or states assumptions
 2. topic-only request returns angles, not a draft
@@ -159,6 +179,8 @@ Start with 25 model-run cases:
 23. heavy but useful demo is simplified instead of cut
 24. reusable prompt demo is kept because it teaches what to do next
 25. agent/operator phrasing keeps the balance implicit
+26. progress claims require live proof instead of stale status language
+27. task files are treated as live state, not doctrine
 
 ## Acceptance bar
 
@@ -167,6 +189,7 @@ For a skill change to pass:
 - all deterministic checks pass
 - at least 80% of selected model-run cases pass
 - no hard-fail cases fail
+- when making qualitative claims, selected `quality_judge` cases pass under `--quality-judge`
 
 Hard-fail cases:
 - invents external evidence, citation, benchmark, or product behavior

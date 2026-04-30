@@ -9,12 +9,14 @@ description: Remove AI tells, Wikipedia tone, and over-shaped polish while keepi
 
 Make the draft sound written by a person.
 
+Canonical pass order lives in `../write-post/references/editing-pass.md`. This skill is the humanity-edit leaf: return edited prose only unless a tradeoff matters.
+
 ## Rules
 
 - Remove AI tells.
 - Remove performative polish.
 - Cut phrases like "rapidly evolving", "empower", "maximize productivity", and "AI landscape" unless the user explicitly needs that wording.
-- Do not keep banned phrases by reframing them as "the pitch", "the promise", or quoted criticism. Cut them from the edited prose entirely.
+- In final edited prose, do not keep banned phrases by reframing them as "the pitch", "the promise", or quoted criticism. If the user is analyzing bad wording, preserve it only as evidence, not as the edited line.
 - Treat AI filler as disposable, not as meaning to preserve. If a sentence exists only to say "AI helps productivity", cut the sentence.
 - Keep cadence and idiom.
 - Do not remove personal pronouns just to sound polished. Use `I`, `you`, or `we` when the piece is personal, experiential, or directly addressing the reader.

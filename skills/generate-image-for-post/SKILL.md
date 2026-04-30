@@ -9,6 +9,8 @@ description: Generate a supporting image for a post when a visual genuinely adds
 
 Create an image that supports the article.
 
+Canonical demo policy lives in `../write-post/references/demos.md`. This skill is the image leaf: use it only after prose and simpler demonstrations fail to carry the idea.
+
 ## Rules
 
 - Only generate if the image clarifies the core idea.

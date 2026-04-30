@@ -9,6 +9,8 @@ description: Turn a topic plus pain-point notes into a want/need/get brief. Use 
 
 Convert research into a strong brief.
 
+Canonical detail lives in `../write-post/references/want-need-get.md`. This skill is the packaging leaf: return the brief only.
+
 ## Output
 
 Write a brief with:

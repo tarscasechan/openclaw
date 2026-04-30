@@ -9,6 +9,8 @@ description: Generate candidate post topics, hooks, and angles from a problem sp
 
 Find the sharpest angle before drafting.
 
+Canonical hook craft lives in `../write-post/references/hooks.md`. This skill is the ideation leaf: return angles only.
+
 ## Output
 
 Return 3-5 candidate angles with:

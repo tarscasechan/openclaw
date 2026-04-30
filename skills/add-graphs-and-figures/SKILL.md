@@ -9,6 +9,8 @@ description: Add code blocks, Mermaid graphs, tables, or other demonstrations wh
 
 Plan and add demonstrations that teach faster than prose.
 
+Canonical detail lives in `../write-post/references/demos.md`. This skill is the demo leaf: return a demo plan, one useful demo, or a skip decision.
+
 ## Two passes
 
 1. **Demo plan before drafting**: decide whether the post is building toward no demo, Mermaid, code, before/after, table, or image.

@@ -9,11 +9,11 @@ description: Orchestrate blog-post writing from rough idea to publishable draft.
 
 Turn an idea into a builder-first post with a strong angle, real reader pain, useful demonstrations, and lean prose.
 
-This is an orchestrator skill. Compose the child skills; do not hide the whole workflow inside one pass. Use `references/state-machine.md` for stage transitions, `references/voice-contract.md` for speaker/reader stance, `references/hooks.md` for first-sentence craft, `references/reader-journey.md` to translate structure into prose, and `references/taste-memory.md` for confirmed taste preferences. Use **Seek Truth** for claims and progress reports, and **Resilient Work** for state and resume behavior.
+This is an orchestrator skill. Compose the child skills; do not hide the workflow inside one pass. Use `references/state-machine.md` for stage transitions, `references/contracts.md` for proof/state/resume behavior, `references/voice-contract.md` for speaker/reader stance, `references/hooks.md` for first-sentence craft, `references/reader-journey.md` to translate structure into prose, and `references/taste-memory.md` for confirmed taste preferences.
 
 ## Start every run
 
-1. Read `tasks/write-post.md` when present; treat it as state, not as optional context.
+1. Read `tasks/write-post.md` when present; treat it as live state under `references/contracts.md`, not as doctrine.
 2. Identify the user's requested stage: idea, voice, hook, research, brief, reader journey, draft, demo plan, demo execution, edit, review, or full workflow.
 3. Check for minimum inputs: topic/problem, intended reader, and desired output location or format. If one missing fact blocks useful work, ask one focused question. Otherwise state the assumption and proceed.
 4. If the user asks for a narrow stage and gives enough input for that stage, do that stage directly. Do not restart earlier workflow steps just because the full post is not packaged yet.
@@ -52,7 +52,7 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
 
 ## Rules
 
-- Use `tasks/write-post.md` as the durable state file for active writing work.
+- Use `tasks/write-post.md` as the durable state file for active writing work; keep doctrine in this skill and its references.
 - Work in visible slices. Do not claim background progress unless a live process or durable task proves it.
 - Restart from concept if ideation, reader pain, or the want/need/get structure is weak.
 - Treat want/need/get as planning structure. Translate it into natural prose for the post body.
@@ -65,7 +65,7 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
 - When writing about agent/human collaboration, keep the balance present without overexplaining it. For direct line edits in the personal-agent identity family, prefer `shared workspace between agent and operator` over vague phrases like `where the work happens`.
 - Use personal pronouns when they make the piece feel owned or directly useful. Do not hide behind impersonal nouns like "the author" or "users" when `I`, `you`, or `we` would be truer.
 - Preserve the user's voice when editing existing prose. Improve the piece; do not replace it with generic polish.
-- For factual or technical claims, verify or mark uncertainty. Do not invent citations, benchmarks, customer pain, or product behavior.
+- For factual, technical, or progress claims, follow `references/contracts.md`: verify, cite the evidence you used, or mark uncertainty.
 - If the user asks for a full post, still move through the gates. Compress the reporting, not the thinking.
 
 ## Output standard
@@ -83,4 +83,4 @@ For blockers, include:
 - the missing input, failed check, weak concept, or unverifiable claim
 - the smallest next action that would unblock work
 
-Never imply a step is live without proof. Defer to `SOUL.md` for principle hierarchy.
+Never imply a step is live without proof. Defer to `SOUL.md` for principle hierarchy and `references/contracts.md` for workflow contracts.

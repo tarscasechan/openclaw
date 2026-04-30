@@ -9,9 +9,11 @@ description: Edit prose using Zinsser-style rules: clarity, brevity, verb-forwar
 
 Edit for clarity first. Keep the voice alive, but cut anything that does not carry weight.
 
+Canonical pass order lives in `../write-post/references/editing-pass.md`. Use `../write-post/references/want-need-get.md` only for post or essay structure, not for every small prose edit.
+
 ## Workflow
 
-1. Check structure first: can the piece be framed as **want / need / get**?
+1. For posts or essays, check structure first: can the piece be framed as **want / need / get**?
 2. Read once for the point.
 3. Trim clutter: filler, throat-clearing, abstractions, hedges, repeated ideas.
 4. Prefer verbs over nouns, nouns over decorations.
@@ -49,4 +51,4 @@ If structure is off, fix that before polishing sentences.
 ## Use the reference checklists
 
 - For a quick pass/fail rubric, load `references/rubric.md`.
-- For structural planning, load `references/want-need-get.md`.
+- For structural planning, load `../write-post/references/want-need-get.md`.

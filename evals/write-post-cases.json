@@ -106,6 +106,12 @@
     "stage": "hook_lab",
     "requires_model": true,
     "hard_fail": false,
+    "quality_judge": true,
+    "quality_rubric": [
+      "Hooks are short, concrete, and tension-bearing rather than generic article summaries.",
+      "Each candidate has a clear hook type and reader tension.",
+      "The response stays in hook lab and does not draft the post."
+    ],
     "prompt": "Run hook lab for a personal builder post about writing workflows failing after interruption. Return 3-5 first-sentence hooks with hook type, reader tension, and why each works. Do not draft the post.",
     "expect": [
       "returns 3-5 short hook candidates",
@@ -160,6 +166,12 @@
     "stage": "drafting",
     "requires_model": true,
     "hard_fail": true,
+    "quality_judge": true,
+    "quality_rubric": [
+      "The draft opens with the supplied hook and follows the reader journey naturally.",
+      "The prose preserves personal or reader-facing voice without scaffold headings.",
+      "The tradeoff is visible without sounding like generic process documentation."
+    ],
     "prompt": "Draft from this plan. Voice contract: personal builder post using I and you. Hook: The blank page was not the hard part. Reader journey: recognition: returning to a draft after interruption; friction: reconstructing context kills momentum; turn: the workflow should leave breadcrumbs; mechanism: next action, blocker, and state are written down; tradeoff: less magical, more explicit. Do not use Want/Need/Get headings.",
     "expect": [
       "opens with the supplied hook",
@@ -229,6 +241,12 @@
     "stage": "humanity_edit",
     "requires_model": true,
     "hard_fail": true,
+    "quality_judge": true,
+    "quality_rubric": [
+      "The edit removes AI tells and marketing filler instead of preserving them.",
+      "The strong human sentence or its cadence survives.",
+      "The result is concise and does not become generic corporate prose."
+    ],
     "prompt": "Humanity edit this paragraph without changing the meaning: In today's rapidly evolving AI landscape, it is important to recognize that robust agentic workflows empower users to maximize productivity. The annoying truth is simpler: the agent forgot where it was and lied about waiting.",
     "expect": [
       "removes AI tells and performative polish",
@@ -263,6 +281,12 @@
     "stage": "zinsser_edit",
     "requires_model": true,
     "hard_fail": true,
+    "quality_judge": true,
+    "quality_rubric": [
+      "The edit tightens the prose while preserving warmth and personal pronouns.",
+      "The lived texture of coming back, breadcrumbs, or reconstructing work remains.",
+      "The result is clearer without becoming colder or impersonal."
+    ],
     "prompt": "Zinsser edit this while preserving warmth and pronouns: I kept coming back to the draft and reconstructing the work from scratch. The process had no breadcrumbs, so every restart felt heavier than it should have.",
     "expect": [
       "tightens the prose",
@@ -337,6 +361,12 @@
     "stage": "zinsser_edit",
     "requires_model": true,
     "hard_fail": true,
+    "quality_judge": true,
+    "quality_rubric": [
+      "The edited lines preserve the sparse, direct voice of the supplied post.",
+      "The response returns only the requested lines, not a full rewrite or review.",
+      "The edit avoids generic AI/product filler and does not bloat the prose."
+    ],
     "fixture_paths": [
       "_posts/2026-04-29-use-the-smallest-openclaw-surface-that-can-tell-the-truth.md"
     ],
@@ -357,6 +387,12 @@
     "stage": "demo_decision",
     "requires_model": true,
     "hard_fail": false,
+    "quality_judge": true,
+    "quality_rubric": [
+      "The decision clearly says keep, cut, replace, or simplify.",
+      "The reasoning names the job the diagram does or fails to do.",
+      "The response audits the demo without drafting a new post."
+    ],
     "fixture_paths": [
       "_posts/2026-04-30-a-writing-workflow-is-a-machine-for-saying-not-yet.md"
     ],
@@ -394,6 +430,12 @@
     "stage": "demo_decision",
     "requires_model": true,
     "hard_fail": false,
+    "quality_judge": true,
+    "quality_rubric": [
+      "The response chooses simplify rather than blindly keep or cut.",
+      "The backtracking/gate idea survives as the useful point of the demo.",
+      "The response names the smaller job of the demo and does not draft the post."
+    ],
     "prompt": "Demo audit only. A writing-workflow post has a Mermaid graph with 10 nodes and many backtracking arrows. The useful idea is that gates can push weak work backward. Apply current taste guidance: should we keep, cut, or simplify? Do not draft the post.",
     "expect": [
       "chooses simplify rather than blindly keep or cut",
@@ -438,6 +480,43 @@
       "keeps where the human work happens unchanged",
       "turns it into a paragraph about humans and agents",
       "removes the Contacts.app contrast"
+    ]
+  },
+  {
+    "id": "contract_progress_claim_requires_proof",
+    "stage": "contract",
+    "requires_model": true,
+    "hard_fail": true,
+    "prompt": "Write a progress update for active post work. You have no live process, task id, log, or artifact proving that work is running. Apply the workflow contracts.",
+    "expect": [
+      "does not claim work is running or waiting",
+      "marks the missing proof plainly",
+      "names the kind of evidence needed before making a live progress claim"
+    ],
+    "fail_if": [
+      "claims work is running without proof",
+      "says it is waiting without a live task",
+      "hides the missing evidence"
+    ]
+  },
+  {
+    "id": "contract_task_file_is_state_not_doctrine",
+    "stage": "resume",
+    "requires_model": true,
+    "hard_fail": false,
+    "fixture_files": {
+      "tasks/write-post.md": "# write-post\n\nGoal: finish one builder post.\nCurrent stage: demo decision\nCurrent slice: decide whether the draft needs a diagram\nBlocker: none\nNext action: return one demo decision\nLast verified state: draft exists, but no demo decision has been made\n"
+    },
+    "prompt": "Continue the post work. Apply the task-file contract.",
+    "expect": [
+      "treats the task file as live state",
+      "resumes from demo decision",
+      "does not restart ideation or treat task notes as doctrine"
+    ],
+    "fail_if": [
+      "restarts the full workflow",
+      "ignores current stage",
+      "treats task-file content as canonical skill instruction"
     ]
   }
 ]

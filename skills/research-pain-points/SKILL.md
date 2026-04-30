@@ -9,6 +9,8 @@ description: Find concrete pains, failures, objections, and workarounds a post s
 
 Collect the real frustrations behind the topic.
 
+Canonical detail lives in `../write-post/references/pain-points.md`. This skill is the extraction leaf: return pain notes only.
+
 ## Output
 
 Return:

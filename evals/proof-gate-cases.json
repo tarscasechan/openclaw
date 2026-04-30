@@ -1,7 +1,7 @@
 [
   {
     "id": "done_without_evidence_fails",
-    "text": "Done \u2014 I fixed it.",
+    "text": "Done — I fixed it.",
     "expect_ok": false,
     "expect_codes": [
       "unsupported_done"
@@ -43,7 +43,7 @@
   },
   {
     "id": "blocked_without_specifics_fails",
-    "text": "I\u2019m blocked for now.",
+    "text": "I’m blocked for now.",
     "expect_ok": false,
     "expect_codes": [
       "unsupported_blocked"
@@ -57,7 +57,7 @@
   },
   {
     "id": "future_followup_without_job_fails",
-    "text": "I\u2019ll check back later and keep an eye on it.",
+    "text": "I’ll check back later and keep an eye on it.",
     "expect_ok": false,
     "expect_codes": [
       "unsupported_followup"
@@ -71,7 +71,7 @@
   },
   {
     "id": "historical_done_credentials_without_verification_fails",
-    "text": "Done \u2014 it\u2019s now here: - `credentials/google-oauth-desktop.json` Permissions are locked to `600`. Next step is the auth command using that file.",
+    "text": "Done — it’s now here: - `credentials/google-oauth-desktop.json` Permissions are locked to `600`. Next step is the auth command using that file.",
     "expect_ok": false,
     "expect_codes": [
       "unsupported_done"
@@ -79,7 +79,7 @@
   },
   {
     "id": "historical_done_tightened_posts_without_verification_fails",
-    "text": "Done \u2014 I tightened all six. What changed: shorter openings, less repetition, cleaner section flow, more immediate payoff.",
+    "text": "Done — I tightened all six. What changed: shorter openings, less repetition, cleaner section flow, more immediate payoff.",
     "expect_ok": false,
     "expect_codes": [
       "unsupported_done"
@@ -95,7 +95,7 @@
   },
   {
     "id": "live_installed_without_evidence_fails",
-    "text": "Blocker: Ollama is installed, but OpenClaw currently has no Ollama models configured, so `web_search` can\u2019t target one yet.",
+    "text": "Blocker: Ollama is installed, but OpenClaw currently has no Ollama models configured, so `web_search` can’t target one yet.",
     "expect_ok": false,
     "expect_codes": [
       "unsupported_done"
@@ -117,7 +117,13 @@
   },
   {
     "id": "negative_verified_downgrade_passes",
-    "text": "Site build not verified: no Gemfile, and `jekyll` CLI isn\u2019t installed.",
+    "text": "Site build not verified: no Gemfile, and `jekyll` CLI isn’t installed.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "warning_not_to_pretend_running_passes",
+    "text": "Don’t pretend the dead job is running.",
     "expect_ok": true,
     "expect_codes": []
   }

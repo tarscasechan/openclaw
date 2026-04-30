@@ -148,6 +148,11 @@ def is_negated_match(text: str, match: re.Match[str]) -> bool:
     return bool(re.search(r"(?i)(?:\bnot\b|\bno\b|haven['’]?t\s+|hasn['’]?t\s+|isn['’]?t\s+|wasn['’]?t\s+|weren['’]?t\s+)\s*$", prefix))
 
 
+def is_warning_not_claim(text: str, match: re.Match[str]) -> bool:
+    prefix = text[max(0, match.start() - 80):match.start()]
+    return bool(re.search(r"(?i)(?:don['’]?t|do not|never)\s+(?:pretend|say|claim)[^.?!;:]*$", prefix))
+
+
 def find_violations(text: str) -> list[Violation]:
     compact = " ".join(text.split())
     if not compact or compact == "HEARTBEAT_OK" or compact == "NO_REPLY":
@@ -167,8 +172,9 @@ def find_violations(text: str) -> list[Violation]:
     if done_match and not conditional_done and not has_done_evidence(compact):
         violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
-    if RUNNING_RE.search(compact) and not has_running_evidence(compact):
-        violations.append(Violation("unsupported_running", "running", RUNNING_RE.search(compact).group(0), "live process, session, cron job, or task id"))
+    running_match = next((m for m in RUNNING_RE.finditer(compact) if not is_negated_match(compact, m) and not is_warning_not_claim(compact, m)), None)
+    if running_match and not has_running_evidence(compact):
+        violations.append(Violation("unsupported_running", "running", running_match.group(0), "live process, session, cron job, or task id"))
 
     tested_match = next((m for m in TESTED_RE.finditer(compact) if not is_negated_match(compact, m)), None)
     if tested_match and not has_test_evidence(compact):

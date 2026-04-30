@@ -21,5 +21,6 @@ Return 3-5 candidate angles with:
 
 - Start from the problem, not the title.
 - Prefer concrete reader pain over abstract themes.
+- Treat the angle hook as provisional. The final first sentence should go through hook lab before drafting.
 - If the input is vague, say what is missing.
 - Do not draft the post yet.

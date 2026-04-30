@@ -11,6 +11,11 @@ Turn a brief into a readable draft.
 
 ## Rules
 
+- Draft only from a strong brief.
+- If Want, Need, or Get is vague, stop and name the missing concrete pain or mechanism.
+- Do not invent details to rescue a weak brief.
+- Use Want/Need/Get as scaffolding only. Do not include `Want`, `Need`, or `Get` as section headings in the draft unless the user asks for the brief format.
+- Draft from the reader journey: hook, recognition, friction, turn, mechanism, tradeoff, landing.
 - Lead with the point.
 - Use progressive disclosure.
 - Keep paragraphs short.

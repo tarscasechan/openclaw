@@ -16,7 +16,8 @@ Edit for clarity first. Keep the voice alive, but cut anything that does not car
 3. Trim clutter: filler, throat-clearing, abstractions, hedges, repeated ideas.
 4. Prefer verbs over nouns, nouns over decorations.
 5. Keep the draft human: preserve rhythm, idiom, and personality.
-6. Stop when another pass would only make it shinier, not better.
+6. Read it aloud after tightening. If the edit removed warmth, pronouns, or lived texture, restore the stronger human line.
+7. Stop when another pass would only make it shinier, not better.
 
 ## What to push toward
 

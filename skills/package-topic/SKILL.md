@@ -19,5 +19,8 @@ Write a brief with:
 ## Rules
 
 - Do this before line-level drafting.
+- This brief is planning scaffolding. The later post draft should not preserve `Want`, `Need`, or `Get` as literal body headings unless explicitly requested.
+- After packaging, translate the brief into a reader journey before drafting.
 - If the structure is weak, restart from concept.
 - Keep the brief short and usable.
+- Always state at least one tradeoff plainly. A brief without tradeoffs is still marketing copy, not a useful writing plan.

@@ -1,190 +1,167 @@
 ---
 layout: post
-title: "Cursor as the Mean Pair Programmer for Agent Skills"
+title: "Cursor Should Write the Counterexample"
 date: 2026-04-30
-description: "The best use of Cursor is not asking it to make an agent skill prettier. It is asking it to make the skill fail."
+description: "The best use of Cursor for agent skills is not polish. It is turning vague instructions into failures the workflow can catch."
 tags: [cursor, agents, skills, evals]
 ---
 
-**Cursor is most useful when it stops being polite.**
+Do not ask Cursor to improve the skill.
 
-Not rude. Not theatrical. Just mean in the way a good pair programmer can be mean.
+That prompt is too polite. It invites the wrong kind of help: cleaner headings, smoother bullets, more complete-sounding rules. The file gets nicer. The agent may not get safer.
 
-The kind who reads your agent skill and says:
+Ask Cursor to write the counterexample instead.
 
-> This sounds nice. What happens when it times out?
+That is the job I want from a mean pair programmer. Not cruelty. Not clever dunking. Just the discipline of looking at an instruction and asking: how will the model satisfy the words while violating the intent?
 
-That is the question most skill files need.
+## Agent skills fail in the gap
 
-## Want / need / get
+An agent skill looks like documentation, but it behaves more like an operating procedure. It tells the agent when to use tools, when to ask, when to stop, what to produce, what to verify, and what state must survive a restart.
 
-- **Want:** use Cursor to make agent skills stronger, not just longer
-- **Need:** adversarial review that finds ambiguity, unsupported claims, and broken handoffs
-- **Get:** a loop where Cursor attacks the skill, you turn failures into gates, and the agent gets harder to fool
+That means the dangerous lines are rarely the ugly ones.
 
-The trap is using Cursor as a prose polisher.
+The dangerous lines are the soft ones:
 
-That feels productive because the skill gets cleaner. The headings improve. The rules sound sharper. The file looks more intentional.
+- “Use good judgment.”
+- “Make progress.”
+- “Verify the result.”
+- “Handle failures gracefully.”
+- “Run the full pipeline.”
+- “Do not be lazy.”
 
-But agent skills do not fail because a bullet was ugly.
+Those lines can be true and still useless.
 
-They fail because the instruction leaves a gap big enough for the model to drive through.
+A model can comply with them in tone while skipping the behavior. It can “verify” by rereading its own output. It can “make progress” by writing a plan. It can “handle failure” by apologizing. It can “run the full pipeline” by leaving the scaffold visible in the published post.
 
-## Agent skills are not normal docs
+The instruction sounded right. The counterexample reveals that it was not operational yet.
 
-A skill file looks like documentation.
+## The better prompt
 
-It is not just documentation.
+I do not want Cursor to be a copyeditor first. I want it to be an adversary with a repair habit.
 
-It tells an agent when to act, what to read, what to produce, what to refuse, how to recover, and what counts as done. That makes it closer to a tiny operating procedure than a README.
-
-So the review should be meaner than a docs review.
-
-A normal docs pass asks:
-
-- Is this clear?
-- Is this organized?
-- Is this readable?
-
-A useful agent-skill pass asks:
-
-- What can the agent falsely claim?
-- What can it skip while sounding compliant?
-- What happens if a subagent dies?
-- What state survives a restart?
-- What external action needs permission?
-- What does “done” mean?
-- What proof is required?
-
-Those are better questions.
-
-They are also exactly the kind of questions Cursor can help keep in view while you edit the surrounding files.
-
-## The prompt I want from Cursor
-
-Not this:
+A useful prompt looks like this:
 
 ```text
-Please improve this skill file.
+Review this agent skill by writing counterexamples.
+
+For each major instruction, show how an agent could appear compliant while failing the user's intent.
+
+Return:
+1. the instruction being exploited
+2. the bad-but-plausible behavior
+3. the missing gate
+4. the smallest eval case or fixture that would catch it
+5. the shortest rule change that would prevent it
 ```
 
-That invites polish.
+That changes the output.
 
-Use something meaner:
+Now Cursor is not saying “this section could be clearer.” It is saying “the agent can say it ran the pipeline while only editing the draft body, because nothing forces premise regeneration or stage evidence.”
 
-```text
-Review this agent skill as an adversarial pair programmer.
+That is the kind of critique that improves a skill.
 
-Find places where the agent can:
-- claim work is done without proof
-- skip a required stage
-- keep running after its exit condition
-- ask the user instead of using available tools
-- mutate higher-level principles
-- perform external side effects without permission
-- fail to resume after timeout or restart
+## From prose to tripwire
 
-For each issue, give:
-1. the ambiguous instruction
-2. the likely bad behavior
-3. the smallest concrete rule, gate, or eval case that would catch it
-```
-
-That prompt changes the work.
-
-Now Cursor is not decorating the skill. It is attacking the seam between intention and behavior.
-
-## The loop
-
-The useful loop is small.
+The loop should be small:
 
 ```mermaid
 flowchart LR
-  A[Skill draft] --> B[Cursor adversarial review]
-  B --> C[Failure examples]
-  C --> D[Rule or gate]
-  D --> E[Eval case]
-  E --> F[Run against real behavior]
-  F -->|fails| D
-  F -->|passes| A
+  Skill[Skill instruction] --> Counter[Counterexample]
+  Counter --> Gate[Gate]
+  Gate --> Eval[Eval case]
+  Eval --> Run[Run against behavior]
+  Run -->|fails| Fix[Patch skill]
+  Fix --> Eval
+  Run -->|passes| Keep[Keep as regression]
 ```
 
-The important step is the eval case.
+The counterexample is the hinge.
 
-Without it, you just have a better-sounding instruction. With it, you have a tripwire.
+Without it, a rule stays abstract. With it, you can turn taste into a tripwire.
 
-For a writing skill, that might mean examples where the assistant says “done” without naming the file it changed. Or says “I tested it” without command output. Or claims a background process is running without a process id, cron job, or task entry.
+For example:
 
-For an inbox skill, it might mean examples where the agent replies externally before permission is established.
+| Soft rule | Counterexample | Gate |
+| --- | --- | --- |
+| “Report progress honestly.” | Agent says “still running” after the process died. | Running claims require process id, cron job, task id, or live session. |
+| “Use the full writing pipeline.” | Agent preserves the old premise and only smooths sentences. | Rewrite must change angle/hook/journey or explicitly justify preserving them. |
+| “Verify correctness.” | Agent says “tested” after visual inspection only. | Tested claims require command output, log, artifact, screenshot, or named blocker. |
+| “Recover after timeout.” | Agent restarts from scratch and loses prior work. | Task file must record last completed stage, blocker, and next action. |
 
-For a research skill, it might mean examples where the agent invents citations or confuses a source summary with proof.
+This is the work Cursor is good at because it can sit next to the editor and keep asking the annoying question: what would failure look like here?
 
-Cursor can help write all of those cases. More importantly, it can help notice when the skill has no place for those cases to attach.
+## Mean review should make the skill shorter
 
-## Mean does not mean bloated
+There is a bad version of hardening where every skill turns into a legal contract.
 
-The danger is turning every skill into a contract full of legalese.
+That is not the goal.
 
-That is the wrong direction.
-
-A mean review should usually make the skill shorter.
-
-It should replace soft instructions with hard edges:
+A good counterexample pass often cuts words. It replaces soft advice with a hard edge:
 
 ```text
-Weak: Be careful when reporting progress.
-Stronger: Do not say work is running unless you can cite a live process, cron job, task id, or session.
+Weak:
+Be careful not to overstate completion.
+
+Stronger:
+Do not say done, fixed, tested, deployed, running, or blocked unless the answer names the artifact, check, process, URL, job, or missing input that proves it.
 ```
+
+Or:
 
 ```text
-Weak: Use good judgment before drafting.
-Stronger: If Want, Need, or Get is vague, stop and name the missing concrete pain.
+Weak:
+Run the whole writing workflow.
+
+Stronger:
+Before drafting, produce or internally satisfy voice, angle, hook, pain, brief, journey, and demo gates. If a gate fails, stop there instead of drafting around it.
 ```
 
-```text
-Weak: Recover gracefully from failure.
-Stronger: After timeout, update the task file with last completed stage, blocker, and next action.
-```
+That is not more ornate. It is more executable.
 
-Good hardening is not more words.
-It is fewer escape hatches.
+The aim is fewer places for the model to hide.
 
-## Where Cursor helps most
+## Where Cursor sees what the model misses
 
-Cursor is especially useful when the skill spans files.
+Cursor is especially useful across files.
 
-A writing workflow might have a parent skill, child skills, reference checklists, eval fixtures, task state, and published drafts. Looking at one file at a time misses the real failure modes.
+Agent behavior rarely comes from one skill file. It comes from the parent skill, child skills, reference docs, eval fixtures, task state, memory, and the actual artifacts produced last time.
 
-The bug is often in the handoff:
+The bug often lives in a handoff:
 
-- the parent says to package first, but the draft skill accepts vague briefs
-- the edit skill preserves voice, but the output contract rewards generic polish
-- the resilient-work skill says to resume, but no task state records the stage
-- the proof gate checks final answers, but not tool-narration claims
+- the parent skill requires a strong brief, but the draft skill does not reject weak briefs
+- the demo guide says “do not decorate,” but the post template rewards diagrams
+- the proof gate checks final answers, but tool narration can still overclaim
+- the task file says to resume, but no stage gets recorded after failure
+- the user asks for premise-level rewriting, but the workflow has no evidence that the premise changed
 
-A mean pair programmer follows those seams.
+A mean pair programmer follows the seam instead of admiring the local prose.
 
-It asks whether the system can actually do what the instruction says.
+It asks: where can this system still lie?
 
 ## The tradeoff
 
-This style makes Cursor less fun.
+This makes Cursor less flattering.
 
-You get fewer “nice refactor” moments and more uncomfortable questions. You also spend more time writing fixtures, gates, and boring acceptance criteria.
+You get fewer instant improvements and more small accusations. You spend more time writing fixtures. You keep ugly examples around. You preserve cases where the agent behaved badly instead of rushing to forget them.
 
-But that is where the value is.
+That can feel tedious.
 
-If a skill only works when the agent is already behaving well, it is not hardened. It is flattered.
+It is also the difference between a style guide and a system.
 
-## The lesson
+A style guide says what good behavior sounds like. A system catches bad behavior when it sounds good.
 
-Do not ask Cursor to make your agent skill sound smart.
+## The line I want to keep
 
-Ask it to make the skill fail.
+Cursor should not be the friend who makes the instruction prettier.
 
-Then keep the failures.
-Turn them into gates.
-Turn the gates into evals.
-Turn the evals into the part of the workflow that refuses to be charmed.
+It should be the pair programmer who writes the failing test.
 
-That is the mean pair programmer you want.
+If the skill says “full pipeline,” Cursor should ask what lazy compliance looks like. If the skill says “verify,” Cursor should ask what proof the model can cite. If the skill says “resume,” Cursor should kill the process in its head and ask what survives.
+
+That is mean in the useful sense.
+
+It gives the agent fewer flattering exits. It turns vague taste into concrete gates. It makes the next failure smaller, earlier, and easier to fix.
+
+Do not ask Cursor to polish the skill first.
+
+Ask it to write the counterexample you will be embarrassed to ship without.

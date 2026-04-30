@@ -18,10 +18,42 @@
     article h2 a:hover { border-bottom: 1px solid; }
     article .date { font-size: 14px; color: #999; }
     article p:first-of-type { margin-top: 6px; }
+    .mermaid { margin: 28px 0; text-align: center; }
+    .mermaid svg { max-width: 100%; height: auto; }
     footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #eee; font-size: 14px; color: #999; }
   </style>
 </head>
 <body>
   {{ content }}
+  <script type="module">
+    const mermaidCodeBlocks = [
+      ...new Set(document.querySelectorAll(
+        ".language-mermaid pre code, pre code.language-mermaid, code.language-mermaid"
+      )),
+    ];
+
+    if (mermaidCodeBlocks.length > 0) {
+      const { default: mermaid } = await import("https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs");
+
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "strict",
+        theme: "default",
+      });
+
+      for (const codeBlock of mermaidCodeBlocks) {
+        const diagram = document.createElement("div");
+        diagram.className = "mermaid";
+        diagram.textContent = codeBlock.textContent;
+
+        const highlightedBlock = codeBlock.closest(".language-mermaid.highlighter-rouge");
+        const preBlock = codeBlock.closest("pre");
+        const blockToReplace = highlightedBlock || preBlock || codeBlock;
+        blockToReplace.replaceWith(diagram);
+      }
+
+      await mermaid.run({ nodes: document.querySelectorAll(".mermaid") });
+    }
+  </script>
 </body>
 </html>

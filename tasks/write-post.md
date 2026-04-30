@@ -60,3 +60,14 @@ Builders first. General readers second.
 - Inspection gate passed: both posts have frontmatter, want/need/get, a Mermaid demo, and >500 words.
 - Site build not verified: no Gemfile for `bundle exec jekyll build`; `jekyll` CLI is not installed.
 - Next useful slice: read both drafts for overlap and cut repeated proof-gate language if they feel too samey.
+
+## 2026-04-30: full rewrite of April 29 posts
+- User requested `/write_post` full-pipeline rewrite of yesterday's posts, explicitly not body-only edits.
+- Interpreted target as the six `_posts/2026-04-29-*.md` drafts listed in Current state.
+- Re-imagined each post from its core concept, preserving filenames/dates but changing titles, descriptions, hooks, journey, demos, and body structure.
+- Voice contract: first-person builder/operator voice addressing builders of personal-agent plumbing.
+- Pipeline applied per post: concept angle -> hook -> pain/research notes from local context -> want/need/get brief -> reader journey -> demo decision -> draft -> demo execution -> humanity/Zinsser/read-aloud tightening.
+- Demo decisions: kept earned Mermaid diagrams for identity/automation/orchestration/plumbing; used a small command snippet for Contacts and OAuth; avoided decorative images.
+- Next gate: verify frontmatter, word counts, markdown shape, no literal Want/Need/Get headings, and inspect diffs.
+- Verification result: all six rewritten posts have frontmatter, 722-804 body words, no literal Want/Need/Get headings, and earned demos/snippets where useful.
+- Build gate: not run because workspace has no Gemfile and `jekyll` CLI is not installed; only structural/content verification was run.

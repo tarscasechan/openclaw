@@ -8,9 +8,11 @@ mechanical proof.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -24,12 +26,13 @@ CASE_FILE = ROOT / "evals" / "proof-gate-cases.json"
 BASELINE_FILE = STATE_DIR / "baseline.json"
 STATE_FILE = STATE_DIR / "state.json"
 TASK_FILE = ROOT / "tasks" / "proof-gate.md"
+ACK_FILE = STATE_DIR / "acknowledged-live.json"
 
 DONE_RE = re.compile(r"(?i)(?:^|\b)(done|fixed|implemented|created|updated|installed|built|completed|resolved)(?:\b|[.!:—-])")
-RUNNING_RE = re.compile(r"(?i)\b(running|still running|in flight|background(?:ed)?|still going|waiting on|waiting for)\b")
-TESTED_RE = re.compile(r"(?i)\b(tested|verified|checked|ran|inspected|audited)\b")
+RUNNING_RE = re.compile(r"(?i)\b(running|still running|in flight|backgrounded|still going|waiting on|waiting for)\b")
+TESTED_RE = re.compile(r"(?i)\b(tested|(?<!allowed/)verified|checked|ran|inspected|audited)\b")
 BLOCKED_RE = re.compile(r"(?i)\b(blocked|stuck)\b")
-FOLLOWUP_RE = re.compile(r"(?i)\b(i(?:'ll|’ll| will)|we(?:'ll|’ll| will)|going to)\b.{0,120}\b(check back|follow up|monitor|keep an eye|remind|try again|later)\b")
+FOLLOWUP_RE = re.compile(r"(?i)\b(i(?:'ll|’ll| will)|we(?:'ll|’ll| will)|going to)\b.{0,120}\b(check back|follow up|monitor|keep an eye|remind|try again)\b")
 
 DONE_EVIDENCE_RE = re.compile(
     r"(?i)\b(evidence|verified|test output|tests?|commands? run|files changed|source|proof|diff|exit(?:ed)?\s*0|logs?/|state/|scripts?/|tasks?/|jobId|sessionId|process|pid)\b"
@@ -40,7 +43,8 @@ BLOCKED_EVIDENCE_RE = re.compile(r"(?i)\b(because|missing|required|needs?|waitin
 FOLLOWUP_EVIDENCE_RE = re.compile(r"(?i)\b(cron|jobId|job id|scheduled|reminder|task id|run id|wake|calendar|timer)\b")
 
 # Phrases used in explanation or code examples should not be treated as claims.
-EXAMPLE_RE = re.compile(r"(?i)(for example|example:|claim types|forbidden unsupported claims|needs |requires |should |must |could )")
+EXAMPLE_RE = re.compile(r"(?i)(for example|example:|claim types|unsupported claims|claims like|forbidden unsupported claims|before claiming|claiming done|claiming done/fixed)")
+INTERNAL_EVAL_PROMPT_RE = re.compile(r"(?i)You are running a single eval case for a Cursor/OpenClaw writing skill")
 
 
 @dataclass
@@ -89,6 +93,14 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
 
 
+def compact_text(text: str) -> str:
+    return " ".join((text or "").split())
+
+
+def text_fingerprint(text: str) -> str:
+    return hashlib.sha1(compact_text(text).encode("utf-8")).hexdigest()[:12]
+
+
 def ensure_bootstrap() -> dict[str, Any]:
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -131,6 +143,11 @@ def has_followup_evidence(text: str) -> bool:
     return bool(FOLLOWUP_EVIDENCE_RE.search(text))
 
 
+def is_negated_match(text: str, match: re.Match[str]) -> bool:
+    prefix = text[max(0, match.start() - 24):match.start()]
+    return bool(re.search(r"(?i)(?:\bnot\b|\bno\b|haven['’]?t\s+|hasn['’]?t\s+|isn['’]?t\s+|wasn['’]?t\s+|weren['’]?t\s+)\s*$", prefix))
+
+
 def find_violations(text: str) -> list[Violation]:
     compact = " ".join(text.split())
     if not compact or compact == "HEARTBEAT_OK" or compact == "NO_REPLY":
@@ -141,16 +158,21 @@ def find_violations(text: str) -> list[Violation]:
     # Avoid turning design descriptions into false claims. This only suppresses
     # claim words inside explicit normative/examples text; concrete first-person
     # progress claims still get checked below.
-    explanatory = bool(EXAMPLE_RE.search(compact)) and not re.search(r"(?i)\b(i|we)\s+(fixed|implemented|created|updated|installed|built|completed|verified|tested|checked|ran)\b", compact)
+    explanatory = bool(EXAMPLE_RE.search(compact)) and not re.search(r"(?i)\b(i|we)\s+(got|fixed|implemented|created|updated|installed|built|completed|verified|tested|checked|ran)\b", compact)
+    if explanatory:
+        return []
 
-    if not explanatory and DONE_RE.search(compact) and not has_done_evidence(compact):
-        violations.append(Violation("unsupported_done", "done", DONE_RE.search(compact).group(0), "artifact plus verification evidence"))
+    done_match = DONE_RE.search(compact)
+    conditional_done = bool(re.search(r"(?i)\b(once|when|after)\b.{0,80}\bdone\b", compact))
+    if done_match and not conditional_done and not has_done_evidence(compact):
+        violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
     if RUNNING_RE.search(compact) and not has_running_evidence(compact):
         violations.append(Violation("unsupported_running", "running", RUNNING_RE.search(compact).group(0), "live process, session, cron job, or task id"))
 
-    if TESTED_RE.search(compact) and not has_test_evidence(compact):
-        violations.append(Violation("unsupported_tested", "tested", TESTED_RE.search(compact).group(0), "test output, command output, log, source, or verification artifact"))
+    tested_match = next((m for m in TESTED_RE.finditer(compact) if not is_negated_match(compact, m)), None)
+    if tested_match and not has_test_evidence(compact):
+        violations.append(Violation("unsupported_tested", "tested", tested_match.group(0), "test output, command output, log, source, or verification artifact"))
 
     if BLOCKED_RE.search(compact) and not has_blocked_evidence(compact):
         violations.append(Violation("unsupported_blocked", "blocked", BLOCKED_RE.search(compact).group(0), "specific missing input, state, error, permission, or decision"))
@@ -222,6 +244,7 @@ def assistant_final_messages_after(start: datetime, audit_hours: float | None, l
         if ".checkpoint." in name or ".trajectory" in name or ".deleted." in name:
             continue
         try:
+            last_user_text = ""
             with path.open() as f:
                 for line_no, line in enumerate(f, start=1):
                     try:
@@ -231,7 +254,17 @@ def assistant_final_messages_after(start: datetime, audit_hours: float | None, l
                     if event.get("type") != "message":
                         continue
                     message = event.get("message") or {}
+                    if message.get("role") == "user":
+                        texts = [
+                            item.get("text") or ""
+                            for item in message.get("content") or []
+                            if item.get("type") == "text"
+                        ]
+                        last_user_text = "\n".join(texts)
+                        continue
                     if message.get("role") != "assistant":
+                        continue
+                    if INTERNAL_EVAL_PROMPT_RE.search(last_user_text):
                         continue
                     ts = parse_ts(event.get("timestamp"))
                     if not ts or ts <= cutoff:
@@ -257,18 +290,36 @@ def assistant_final_messages_after(start: datetime, audit_hours: float | None, l
 
 def run_live_audit(baseline: dict[str, Any], audit_hours: float | None, limit: int) -> dict[str, Any]:
     start = parse_ts(baseline.get("created_at")) or datetime.now(timezone.utc)
+    acked = {
+        (item.get("fingerprint"), item.get("code"))
+        for item in load_json(ACK_FILE, [])
+        if item.get("fingerprint") and item.get("code")
+    }
     messages = assistant_final_messages_after(start, audit_hours, limit)
     flagged: list[dict[str, Any]] = []
+    acknowledged_count = 0
     for row in messages:
-        violations = find_violations(row["text"])
+        fingerprint = text_fingerprint(row["text"])
+        violations = []
+        for violation in find_violations(row["text"]):
+            if (fingerprint, violation.code) in acked:
+                acknowledged_count += 1
+                continue
+            violations.append(violation)
         if violations:
-            flagged.append({**row, "violations": [v.to_json() for v in violations]})
-    return {"messages_scanned": len(messages), "flagged": flagged, "ok": not flagged}
+            flagged.append({**row, "fingerprint": fingerprint, "violations": [v.to_json() for v in violations]})
+    return {"messages_scanned": len(messages), "flagged": flagged, "acknowledged": acknowledged_count, "ok": not flagged}
 
 
 def update_task_file(report: dict[str, Any]) -> None:
-    verdict = "passing" if report["ok"] else "failing"
-    next_step = "keep cron running and inspect next eval" if report["ok"] else "repair first failing unit/live-audit violation"
+    policy = report.get("policy") or {}
+    verdict = "completed" if policy.get("disabled") else ("passing" if report["ok"] else "failing")
+    if policy.get("disabled"):
+        next_step = "cron disabled after completion criteria; re-enable after proof-gate changes or a new audit need"
+    elif report["ok"]:
+        next_step = "continue bounded audit until completion criteria are met"
+    else:
+        next_step = "repair first failing unit/live-audit violation"
     blocker = "none" if report["ok"] else "unsupported claims or evaluator regression found"
     TASK_FILE.write_text(
         "# Proof Gate Task\n\n"
@@ -276,7 +327,9 @@ def update_task_file(report: dict[str, Any]) -> None:
         f"Status: {verdict}\n"
         f"Last run: {report['ran_at']}\n"
         f"Unit cases: {report['unit']['total']} total, {len(report['unit']['failures'])} failures\n"
-        f"Live audit: {report['live']['messages_scanned']} final answers scanned, {len(report['live']['flagged'])} flagged\n"
+        f"Live audit: {report['live']['messages_scanned']} final answers scanned, {len(report['live']['flagged'])} flagged, {report['live'].get('acknowledged', 0)} acknowledged\n"
+        f"Consecutive passes: {policy.get('consecutive_passes', 0)}\n"
+        f"Completion rule: {policy.get('completion_rule', 'none')}\n"
         f"Next slice: {next_step}\n"
         f"Blocker: {blocker}\n"
         "Evidence:\n"
@@ -285,32 +338,103 @@ def update_task_file(report: dict[str, Any]) -> None:
     )
 
 
+def prior_pass_streak(history_path: Path) -> int:
+    try:
+        lines = [line for line in history_path.read_text().splitlines() if line.strip()]
+    except FileNotFoundError:
+        return 0
+    streak = 0
+    for line in reversed(lines):
+        try:
+            item = json.loads(line)
+        except Exception:
+            break
+        if item.get("ok"):
+            streak += 1
+        else:
+            break
+    return streak
+
+
+def build_policy(report_ok: bool, baseline: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
+    prior = prior_pass_streak(LOG_DIR / "history.jsonl")
+    streak = prior + 1 if report_ok else 0
+    baseline_dt = parse_ts(baseline.get("created_at")) or datetime.now(timezone.utc)
+    age_hours = max(0.0, (datetime.now(timezone.utc) - baseline_dt).total_seconds() / 3600)
+    rule = "none"
+    if args.auto_disable_after_passes:
+        rule = f"disable cron after {args.auto_disable_after_passes} consecutive passing runs and {args.min_age_hours:g}h minimum age"
+    policy: dict[str, Any] = {
+        "completion_rule": rule,
+        "consecutive_passes": streak,
+        "baseline_age_hours": round(age_hours, 3),
+        "disabled": False,
+        "disable_attempted": False,
+        "disable_ok": None,
+        "disable_output": None,
+    }
+    should_disable = (
+        bool(args.cron_job_id)
+        and bool(args.auto_disable_after_passes)
+        and report_ok
+        and streak >= args.auto_disable_after_passes
+        and age_hours >= args.min_age_hours
+    )
+    if should_disable:
+        policy["disable_attempted"] = True
+        try:
+            proc = subprocess.run(
+                ["openclaw", "cron", "disable", args.cron_job_id],
+                cwd=str(ROOT),
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                timeout=30,
+            )
+            policy["disable_ok"] = proc.returncode == 0
+            policy["disabled"] = proc.returncode == 0
+            policy["disable_output"] = (proc.stdout or "").strip()[-1000:]
+        except Exception as exc:
+            policy["disable_ok"] = False
+            policy["disable_output"] = repr(exc)
+    return policy
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Evaluate proof-gate claim discipline.")
     parser.add_argument("--audit-hours", type=float, default=24.0, help="Audit final answers in this many recent hours, bounded by baseline timestamp.")
     parser.add_argument("--limit", type=int, default=200, help="Maximum final answers to inspect.")
     parser.add_argument("--json", action="store_true", help="Print full JSON report.")
+    parser.add_argument("--cron-job-id", default="", help="Cron job id to disable when bounded completion criteria are met.")
+    parser.add_argument("--auto-disable-after-passes", type=int, default=0, help="Disable cron after this many consecutive passing runs. 0 disables auto-disable.")
+    parser.add_argument("--min-age-hours", type=float, default=0.0, help="Minimum baseline age before auto-disable can trigger.")
     args = parser.parse_args()
 
     baseline = ensure_bootstrap()
     unit = run_unit_cases()
     live = run_live_audit(baseline, args.audit_hours, args.limit)
+    report_ok = bool(unit["ok"] and live["ok"])
     report = {
         "ran_at": now_utc(),
         "baseline": baseline,
         "unit": unit,
         "live": live,
-        "ok": bool(unit["ok"] and live["ok"]),
+        "ok": report_ok,
     }
+    report["policy"] = build_policy(report_ok, baseline, args)
     write_json(LOG_DIR / "latest.json", report)
     with (LOG_DIR / "history.jsonl").open("a") as f:
         f.write(json.dumps(report, sort_keys=True) + "\n")
+    policy = report["policy"]
     write_json(STATE_FILE, {
-        "status": "passing" if report["ok"] else "failing",
+        "status": "completed" if policy.get("disabled") else ("passing" if report["ok"] else "failing"),
         "last_verified": report["ran_at"],
         "evidence": [str(LOG_DIR / "latest.json"), str(LOG_DIR / "history.jsonl")],
-        "next_step": "keep cron running" if report["ok"] else "repair first failing violation",
+        "next_step": "cron disabled; re-enable after material changes" if policy.get("disabled") else ("continue bounded audit until completion criteria are met" if report["ok"] else "repair first failing violation"),
         "blocker": None if report["ok"] else "proof-gate eval failed",
+        "consecutive_passes": policy.get("consecutive_passes", 0),
+        "completion_rule": policy.get("completion_rule", "none"),
+        "cron_disabled": bool(policy.get("disabled")),
     })
     update_task_file(report)
 

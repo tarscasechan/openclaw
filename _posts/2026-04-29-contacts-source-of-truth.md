@@ -35,6 +35,15 @@ So the pattern is simple:
 3. resolve by name/email/phone
 4. refresh on a schedule
 
+```mermaid
+flowchart LR
+  A[Contacts.app] --> B[Local cache]
+  B --> C[Resolver]
+  C --> D[Email]
+  C --> E[Messaging]
+  B --> F[Refresh job]
+```
+
 ## Why cache at all?
 
 Because the live source is not the product.

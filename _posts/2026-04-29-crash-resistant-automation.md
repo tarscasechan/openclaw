@@ -16,6 +16,12 @@ Split the workflow into pieces:
 - resolve the lookup
 - send the thing
 
+```text
+source -> cache -> resolve -> send
+   ^                      |
+   |------ refresh job ---|
+```
+
 If one piece fails, the whole system doesn’t.
 
 ## Why scripts crash

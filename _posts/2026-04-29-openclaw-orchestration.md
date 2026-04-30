@@ -16,6 +16,16 @@ OpenClaw works best when the tools stay small and honest.
 - **Wiki**: durable synthesis
 - **Current session**: fast decisions
 
+```mermaid
+flowchart TB
+  S[Session] --> A[Subagent]
+  S --> C[Cron / heartbeat]
+  C --> M[Memory]
+  A --> W[Wiki]
+  M --> W
+  S --> W
+```
+
 That keeps the system from turning into one giant blob pretending to be a brain.
 
 ## Why it matters

@@ -17,6 +17,12 @@ Then you get the worst possible failure mode: a page that says the app is blocke
 
 Use your own OAuth client.
 
+```bash
+gcloud auth application-default login \
+  --client-id-file=/Users/tars/.openclaw/workspace/credentials/google-oauth-desktop.json \
+  --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/gmail.send
+```
+
 The durable setup is:
 - create an **External** consent screen
 - add your Gmail as a **test user**

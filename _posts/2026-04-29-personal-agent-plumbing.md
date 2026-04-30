@@ -20,6 +20,15 @@ The better model is plumbing.
 
 Each piece should fail without taking the others down.
 
+```mermaid
+flowchart LR
+  I[Identity] --> C[Choose channel]
+  C --> E[Email]
+  C --> M[Messaging]
+  C --> R[Reminder]
+  I --> H[History / memory]
+```
+
 ## The connection pattern
 
 1. resolve identity

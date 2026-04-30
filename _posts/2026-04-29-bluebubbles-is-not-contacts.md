@@ -33,6 +33,14 @@ Use BlueBubbles for delivery.
 Use Contacts.app for identity.
 Use a local cache for lookup.
 
+```mermaid
+flowchart LR
+  A[Contacts.app] --> B[Cache]
+  B --> C[Resolver]
+  C --> D[BlueBubbles]
+  D --> E[iMessage delivery]
+```
+
 That keeps the system honest:
 - macOS owns identity
 - messaging owns transport

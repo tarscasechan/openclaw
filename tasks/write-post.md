@@ -84,3 +84,26 @@ Builders first. General readers second.
 - Next gate: verify frontmatter, body word counts, markdown fences, no literal Want/Need/Get body headings, and inspect diff.
 - Verification result: both rewritten April 30 posts have valid frontmatter, >1000 body words, no literal Want/Need/Get body headings, balanced code fences, and passed `git diff --check`.
 - Build gate: not run locally because this workspace has no Gemfile and `jekyll` CLI is not installed; structural/content gates passed.
+
+## 2026-04-30: five new topic posts
+- User liked five proposed topics and asked to use write-post to produce each one-by-one.
+- Output location assumption: create new dated Jekyll drafts under `_posts/` with `2026-04-30` dates; leave uncommitted/un-deployed until explicitly requested.
+- Created `_posts/2026-04-30-assistant-should-ask-fewer-questions.md`.
+  - Premise: good assistants act on recoverable assumptions and save questions for material/risky choices.
+  - Demo: Mermaid decision flow for ask vs act.
+- Created `_posts/2026-04-30-memory-is-not-truth.md`.
+  - Premise: memory gives continuity but needs provenance/proof to avoid fossilizing guesses.
+  - Demo: Mermaid layered memory/proof flow.
+- Created `_posts/2026-04-30-inbox-is-a-router-not-a-todo-list.md`.
+  - Premise: if every email is a request, the inbox should route messages into clear next states rather than act as the work system.
+  - Demo: Mermaid email-routing flow.
+- Created `_posts/2026-04-30-agents-need-receipts.md`.
+  - Premise: agent status claims need receipts outside the model.
+  - Demo: claim-to-receipt table and Mermaid proof map.
+- Created `_posts/2026-04-30-best-personal-ai-feels-boring-inside.md`.
+  - Premise: personal AI feels magical at the edge when the internals are plain pipes and explicit state.
+  - Demo: Mermaid personal-agent plumbing graph.
+- Pipeline per post: voice contract -> angle/hook -> pain/author stake -> want/need/get -> reader journey -> demo plan -> draft -> demo execution -> humanity/Zinsser/read-aloud tightening.
+- Next gate: verify frontmatter, word counts, no literal Want/Need/Get headings, balanced fences, and whitespace diff.
+- Verification result: all five new posts have valid frontmatter, 784-851 body words, no literal Want/Need/Get headings, balanced code fences, and passed `git diff --check` for tracked task state plus new post paths.
+- Build gate: not run locally because workspace has no Gemfile and `jekyll` CLI is not installed; structural/content gates passed.

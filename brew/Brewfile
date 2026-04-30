@@ -1,6 +1,7 @@
 tap "antoniorodr/memo"
 tap "steipete/tap"
 brew "gh"
+brew "gogcli"
 brew "node@24"
 brew "ollama"
 brew "openai-whisper"

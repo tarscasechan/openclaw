@@ -25,8 +25,11 @@ refresh_cache() {
   mkdir -p "$cache_dir"
   chmod 700 "$cache_dir" 2>/dev/null || true
 
-  local raw_tsv
-  raw_tsv="$(osascript <<'APPLESCRIPT'
+  open -g -a Contacts >/dev/null 2>&1 || true
+
+  local applescript_file raw_tsv
+  applescript_file="$(mktemp)"
+  cat >"$applescript_file" <<'APPLESCRIPT'
 on replace_text(theText, searchString, replacementString)
   set AppleScript's text item delimiters to searchString
   set theItems to text items of theText
@@ -74,12 +77,17 @@ tell application "Contacts"
     set end of rows to contactName & tab & my join_list(emailValues, "|") & tab & my join_list(phoneValues, "|")
   end repeat
 
+  set AppleScript's text item delimiters to linefeed
   return rows as text
 end tell
 APPLESCRIPT
-)" || die "could not read Contacts.app; grant access when macOS prompts for Contacts"
+  raw_tsv="$(osascript "$applescript_file")" || {
+    rm -f "$applescript_file"
+    die "could not read Contacts.app; grant access when macOS prompts for Contacts"
+  }
+  rm -f "$applescript_file"
 
-  printf '%s\n' "$raw_tsv" | python3 - "$cache_file" <<'PY'
+  RAW_TSV="$raw_tsv" python3 - "$cache_file" <<'PY'
 import json
 import os
 import sys
@@ -87,9 +95,10 @@ from datetime import datetime, timezone
 
 out_path = sys.argv[1]
 tmp_path = out_path + ".tmp"
+raw_tsv = os.environ.get("RAW_TSV", "")
 
 contacts = []
-for line in sys.stdin.read().splitlines():
+for line in raw_tsv.splitlines():
     if not line.strip():
         continue
     parts = line.split("\t")

@@ -131,6 +131,7 @@ Before claiming real-world/task state in final answers, apply the proof gate:
 - **done/fixed/implemented/updated** → cite artifact plus verification
 - **running/in flight/waiting** → cite live process, session, cron job, task id, or run id
 - **tested/verified/checked/ran/spot-checked** → cite command output, log, source, status code, or verification artifact
+- **checked/inspected/audited an existing list/file/state** → cite the exact source path, command output, log, or say “I haven’t verified this yet”
 - **blocked/stuck** → name the specific missing input, permission, state, error, or decision
 - **I'll follow up/check later** → create or cite a cron job/reminder/durable task
 

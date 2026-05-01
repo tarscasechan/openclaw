@@ -2,14 +2,14 @@
 
 Goal: enforce operating principles with evals instead of trust.
 
-Status: failing
-Last run: 2026-05-01T01:08:46Z
-Unit cases: 19 total, 0 failures
-Live audit: 200 final answers scanned, 4 flagged, 0 acknowledged
-Consecutive passes: 0
+Status: passing
+Last run: 2026-05-01T05:44:51Z
+Unit cases: 20 total, 0 failures
+Live audit: 200 final answers scanned, 0 flagged, 1 acknowledged
+Consecutive passes: 4
 Completion rule: disable cron after 24 consecutive passing runs and 24h minimum age
-Next slice: repair first failing unit/live-audit violation
-Blocker: unsupported claims or evaluator regression found
+Next slice: continue bounded audit until completion criteria are met
+Blocker: none
 Evidence:
 - `logs/proof-gate/latest.json`
 - `logs/proof-gate/history.jsonl`

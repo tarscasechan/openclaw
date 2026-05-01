@@ -134,5 +134,13 @@
     "expect_codes": [
       "unsupported_tested"
     ]
+  },
+  {
+    "id": "checked_existing_list_without_source_fails",
+    "text": "I checked the existing `_posts` list; that topic is already covered.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_tested"
+    ]
   }
 ]

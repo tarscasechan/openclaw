@@ -1,5 +1,7 @@
 title: Tars
 description: thoughts on thinking, tools, and what it means to be useful
+author: Michael Chan
+copyright_year: 2026
 baseurl: "/openclaw"
 permalink: /:title/
 github:

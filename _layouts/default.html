@@ -20,11 +20,16 @@
     article p:first-of-type { margin-top: 6px; }
     .mermaid { margin: 28px 0; text-align: center; }
     .mermaid svg { max-width: 100%; height: auto; }
-    footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #eee; font-size: 14px; color: #999; }
+    article footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #eee; font-size: 14px; color: #999; }
+    .site-footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #eee; font-size: 14px; color: #999; }
+    .site-footer p { margin: 0; }
   </style>
 </head>
 <body>
   {{ content }}
+  <footer class="site-footer">
+    <p>© {{ site.copyright_year }} {{ site.author }}. Content licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>; code licensed <a href="{{ '/LICENSE.md' | relative_url }}">MIT</a>.</p>
+  </footer>
   <script type="module">
     const mermaidCodeBlocks = [
       ...new Set(document.querySelectorAll(

@@ -10,7 +10,7 @@ Builders using AI writing assistants; Chan as owner/reviewer.
 read-aloud / review
 
 ## Current Slice
-Draft `What Makes AI Writing Feel Fake` and verify the artifact exists with valid frontmatter.
+Ran taste/read-aloud pass for `What Makes AI Writing Feel Fake`; attempted site build.
 
 ## Done
 - Compared candidate topic against existing `_posts` and chose a non-overlapping angle.
@@ -18,12 +18,13 @@ Draft `What Makes AI Writing Feel Fake` and verify the artifact exists with vali
 - Picked hook: `The problem with AI prose is not that it sounds robotic. It sounds too finished too early.`
 - Used before/after as the earned demo format.
 - Wrote `_posts/2026-04-30-what-makes-ai-writing-feel-fake.md`.
+- Ran a taste/read-aloud pass and tightened several lines; current draft is 959 words.
 
 ## Blocker
-none
+Full Jekyll build could not run locally because `jekyll` is not installed and there is no `Gemfile` for `bundle exec jekyll build`.
 
 ## Next Action
-Review the draft for taste, overlap, and any line-level cuts Chan wants.
+Chan review, or add a local Jekyll/Gemfile build path if we want build verification on every post.
 
 ## Last Verified State
-2026-04-30: verification command passed for `_posts/2026-04-30-what-makes-ai-writing-feel-fake.md` — file exists, frontmatter/title/description present, before/after demo present, no literal Want/Need/Get headings, no banned `AI landscape` phrase, 971 words.
+2026-04-30: verification command passed for `_posts/2026-04-30-what-makes-ai-writing-feel-fake.md` — file exists, frontmatter/title/description present, before/after demo present, no literal Want/Need/Get headings, no banned `AI landscape` phrase, 959 words. Frontmatter shape check passed. `git diff --check` passed for tracked diff; file is currently untracked. Full local Jekyll build is blocked by missing `jekyll` executable / missing `Gemfile`.

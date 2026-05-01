@@ -10,6 +10,12 @@ wiki/.openclaw-wiki/
 # OS noise
 .DS_Store
 *.swp
+
+# Python cache
+.pycache/
+__pycache__/
+*.pyc
+
 # OpenClaw memory system
 memory/.dreams/
 memory/dreaming/

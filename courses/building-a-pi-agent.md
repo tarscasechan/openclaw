@@ -1,6 +1,7 @@
 ---
 
 ## layout: default
+
 title: Build a Pi Agent
 permalink: /courses/build-a-pi-agent/
 description: A short, example-led course on designing portable Pi agents.
@@ -11,7 +12,7 @@ A tiny course for building agents that run well in Pi and travel cleanly between
 
 We will build one agent: **Signal Sorter**. It reads one messy message and returns one next action.
 
-It borrows the familiar 4D triage language: **do, defer, delegate, delete**. We add two practical labels: **ask** when unclear, and **reference** when something should be kept but not acted on.
+It borrows the familiar 4D triage language: **do, defer, delegate, delete**. If key information is missing, it asks one clarifying question so it can get to a D.
 
 That is a good first agent because it shows judgment without needing tools, accounts, or private data.
 
@@ -27,55 +28,92 @@ Start with three lines.
 
 ```md
 You are Signal Sorter.
-You sort one inbound message into do, defer, delegate, delete, ask, or reference.
+You sort one inbound message into one next action.
 You refuse to solve the whole problem.
 ```
 
 That is enough. Do not add lore.
 
-**Try it:** Write your own three lines:
-
-```md
-You are ____.
-You help with ____.
-You refuse to ____.
-```
+**Try it:** Write your own three lines.
 
 **What changed?** The agent has a job and a boundary.
 
+**But:** identity is not behavior. The agent can still answer any way it wants.
+
 ---
 
-## Lesson 2: Write the Contract — behavior
+## Lesson 2: Choose Four Decisions — 4D
 
-**Outcome:** Make the agent’s answer checkable.
+**Outcome:** Turn identity into behavior.
 
-Add the smallest contract that could work.
+A named agent still needs choices. Give it four.
 
 ```md
-Input:
-- One inbound message
-
-Return:
-1. Label
-2. Why
-3. Next
-4. Draft, only if needed
-
-Rules:
-- Pick one label only.
-- Use do, defer, delegate, delete, ask, or reference.
-- Do not invent missing facts.
+Decision is one of:
+- do: respond or act now
+- defer: save for later
+- delegate: route to someone else
+- delete: no action remains
 ```
 
-A contract keeps the agent from wandering.
+Small decision sets make agents easier to test.
 
-**Try it:** Add one input, one output shape, and three rules.
+**Try it:** Sort this message:
 
-**What changed?** You can now tell whether the agent obeyed.
+```md
+Reminder: renew the domain before Friday.
+```
+
+Expected:
+
+```txt
+Decision: defer
+```
+
+**What changed?** The agent has a closed set of actions.
+
+**But:** closed choices fail unclear messages.
 
 ---
 
-## Lesson 3: Create the Agent Card — agent.md
+## Lesson 3: Split Status — failure
+
+**Outcome:** Give the agent a clean way to fail the 4Ds.
+
+Some messages do not fit yet.
+
+```md
+The thing we discussed is broken again.
+```
+
+Do not force a D. The agent needs more information.
+
+Add a status before the decision:
+
+```txt
+Status: decided | needs-clarification
+Decision: do | defer | delegate | delete | —
+```
+
+If status is `needs-clarification`, decision is `—` and the next action is one question.
+
+```txt
+Status: needs-clarification
+Decision: —
+Why: “The thing” is ambiguous.
+Next: Ask what is broken.
+Draft: What thing is broken again?
+```
+
+**Try it:** Add `Status` to the return shape.
+
+**What changed?** Clarification is no longer a fifth D. It is how the agent gets to a D.
+
+**But:** now the contract needs a home.
+
+---
+
+## Lesson 4: Create the Agent Card — agent.md
 
 **Outcome:** Put the portable agent in one file.
 
@@ -85,16 +123,15 @@ Make `agent.md` first. Other files can wait.
 # Signal Sorter
 
 Runtime target: Pi-compatible agent loop
-Model class: reasoning-cheap
 Required tools: none
 
 ## Role
 
 You are Signal Sorter: a calm sorter of messy inbound signals.
 
-You sort one message into one next action.
+You use familiar 4D triage language: do, defer, delegate, delete.
 
-You use familiar 4D triage language: do, defer, delegate, delete. You also use ask when the next action is unclear, and reference when something should be kept but not acted on.
+If key information is missing, you clarify first. Clarify is not a fifth D; it is how you get to a D.
 
 ## Contract
 
@@ -103,32 +140,33 @@ Input:
 - Optional context about the sender
 
 Return:
-1. `Label:` one of `do`, `defer`, `delegate`, `delete`, `ask`, `reference`
-2. `Why:` one short sentence
-3. `Next:` the smallest useful next action
-4. `Draft:` only if the label is `do`, `delegate`, or `ask`
+1. `Status:` `decided` or `needs-clarification`
+2. `Decision:` one of `do`, `defer`, `delegate`, `delete`; use `—` if clarification is needed
+3. `Why:` one short sentence
+4. `Next:` the smallest useful next action
+5. `Draft:` only if useful
 
 Rules:
-- Pick one label only.
+- If key information is missing, set `Status: needs-clarification`, `Decision: —`, and ask one question.
+- Otherwise set `Status: decided` and choose one 4D decision.
 - Prefer `do` when the sender expects a response, even if they say “no rush.”
-- Treat “no rush” as urgency, not label.
-- Prefer `defer` when work should be done later without replying now.
+- Treat “no rush” as urgency, not decision.
+- Prefer `defer` only when work should happen later and no response is expected now.
 - Prefer `delegate` when someone else should handle it.
-- Prefer `delete` when no action or reference value remains.
-- Prefer `reference` when it is useful to keep but not act on.
-- If the message is unclear, label it `ask`.
+- Prefer `delete` when no action remains.
 - Do not invent missing facts.
 - Keep the draft under 80 words.
-- If the sender lowers urgency, acknowledge it briefly in the draft when useful.
 ```
 
 **Try it:** Save this as `signal-sorter-agent/agent.md`.
 
 **What changed?** The agent is now portable text, not just a prompt in chat.
 
+**But:** the agent card is starting to do too much.
+
 ---
 
-## Lesson 4: Add One Skill — method
+## Lesson 5: Add One Skill — method
 
 **Outcome:** Move repeatable procedure into a skill.
 
@@ -139,42 +177,45 @@ Create `skills/triage-message/SKILL.md`:
 ```md
 ---
 name: triage-message
-description: Use for sorting one inbound message with 4D triage language: do, defer, delegate, delete, plus ask and reference.
+description: Use for sorting one inbound message with 4D triage language: do, defer, delegate, delete; clarify first when key information is missing.
 ---
 
 # Triage Message
 
 Read the message once.
 
-Choose one label:
+First ask: is key information missing?
 
-1. Does the sender expect a quick response now? -> `do`
-2. Should work happen later without replying now? -> `defer`
+- If yes, set `Status: needs-clarification`, `Decision: —`, and ask one question.
+- If no, set `Status: decided` and choose one 4D decision:
+
+1. Does the sender expect a response, even a low-urgency one? -> `do`
+2. Should work happen later with no response expected now? -> `defer`
 3. Should someone else handle it? -> `delegate`
-4. Is there no action or reference value? -> `delete`
-5. Is it useful to keep but not act on? -> `reference`
-6. Is it unclear but maybe important? -> `ask`
+4. Is there no action left? -> `delete`
 
-Pick one label only.
+Pick one decision only.
 ```
 
 **Try it:** Add the skill file. Do not add a second skill yet.
 
 **What changed?** The agent has one reusable method.
 
+**But:** this still assumes the next machine has the same model.
+
 ---
 
-## Lesson 5: Choose the Model Class — portability
+## Lesson 6: Choose the Model Class — portability
 
 **Outcome:** Name the capability, not the provider.
 
-A portable agent should not require one model.
-
-Bad:
+This works on your machine:
 
 ```md
 model: anthropic/claude-sonnet-4-6
 ```
+
+But it may fail on mine. A portable agent should not require one provider.
 
 Better:
 
@@ -182,7 +223,7 @@ Better:
 Model class: reasoning-cheap
 ```
 
-Each machine maps that locally:
+Each machine maps that locally.
 
 ```md
 reasoning-cheap -> a fast model that can classify and explain
@@ -190,41 +231,61 @@ prose-strong    -> a model that edits language well
 code-strong     -> a model that can change code safely
 ```
 
-**Try it:** Keep `Model class: reasoning-cheap` in `agent.md`.
+**Try it:** Add this to `agent.md`:
+
+```md
+Model class: reasoning-cheap
+```
 
 **What changed?** The agent can move between Pi machines.
 
+**But:** portable does not mean correct.
+
 ---
 
-## Lesson 6: Run One Task — smoke test
+## Lesson 7: Run Two Cases — smoke test
 
-**Outcome:** Test one narrow input.
+**Outcome:** Test one decided case and one clarification case.
 
-Use one message.
+Use two messages.
 
 ```md
-Input:
+Input A:
 Can you send me the notes from yesterday? No rush.
+
+Input B:
+The thing we discussed is broken again.
 ```
 
-Expected shape:
+Expected shapes:
 
 ```txt
-Label: do
+Status: decided
+Decision: do
 Why: They asked for a specific item and expect a response.
-Next: Send the notes, or ask where to send them if the destination is unclear.
+Next: Send the notes when available.
 Draft: Sure — I’ll send them over. No rush noted.
+```
+
+```txt
+Status: needs-clarification
+Decision: —
+Why: “The thing” is ambiguous.
+Next: Ask what is broken.
+Draft: What thing is broken again?
 ```
 
 The exact words can differ. The shape should not.
 
-**Try it:** Run only this message through the agent.
+**Try it:** Save both cases in `examples/smoke-test.md`.
 
-**What changed?** You tested the contract before adding complexity.
+**What changed?** You tested both a 4D decision and the clarification door.
+
+**But:** examples are not standards.
 
 ---
 
-## Lesson 7: Inspect the Output — evaluation
+## Lesson 8: Inspect the Output — evaluation
 
 **Outcome:** Catch failure with a tiny checklist.
 
@@ -232,30 +293,33 @@ Create `evals/checklist.md`:
 
 ```md
 Passes if:
-- Output has Label, Why, Next, and Draft when needed.
-- Label is one of do, defer, delegate, delete, ask, reference.
-- Exactly one label is chosen.
+- Output has Status, Decision, Why, Next, and Draft when useful.
+- Status is decided or needs-clarification.
+- Decision is one of do, defer, delegate, delete, or — when clarification is needed.
+- Exactly one decision is chosen when Status is decided.
 - No facts are invented.
 - Draft is under 80 words.
 
 Fails if:
+- Status is anything other than `decided` or `needs-clarification`.
+- It treats clarification as a 4D decision.
 - It tries to complete the whole task instead of triaging it.
-- It gives multiple labels.
+- It gives multiple decisions.
 - It writes a long email.
-- It deletes an unclear but important message instead of asking.
+- It deletes a message with missing key information instead of clarifying.
 ```
 
 Keep the eval boring. Boring evals catch real mistakes.
 
-**Try it:** Check the smoke-test output against this list.
+**Try it:** Check both smoke-test outputs against this list.
 
-**What changed?** Taste became visible.
+**What changed?** The agent has a visible standard for success.
+
+**But:** good files scattered in a folder are not yet a package.
 
 ---
 
-## Lesson 8: Package the Agent — sharing
-
-**Outcome:** Bundle only what another Pi machine needs.
+## Capstone: Package One Small Agent
 
 The smallest useful package is:
 
@@ -269,47 +333,11 @@ signal-sorter-agent/
     smoke-test.md
   evals/
     checklist.md
-  adapters/
-    openclaw.agent.json5
 ```
 
-The adapter is not the agent. It is a local install hint.
+That is the agent. Installation can come later.
 
-```json5
-{
-  id: "signal-sorter",
-  name: "Signal Sorter",
-  agentRuntime: { id: "pi" },
-  // Pick a local model for modelClass: reasoning-cheap.
-  // model: "openai/gpt-5.4-mini",
-  skills: ["triage-message"],
-  identity: {
-    name: "Signal Sorter",
-    emoji: "📥",
-    theme: "calm inbound-signal sorter"
-  }
-}
-```
-
-Do not include credentials, sessions, absolute paths, or provider-only assumptions.
-
-**Try it:** Zip the folder and hand it to another Pi machine.
-
-**What changed?** The agent can be shared without carrying your machine with it.
-
----
-
-## Capstone: Build One Small Agent
-
-Build `Signal Sorter`.
-
-It is done when it has:
-
-- one `agent.md`
-- one skill
-- one smoke test
-- one checklist
-- one adapter
+Do not include credentials, sessions, absolute paths, or provider-only model names.
 
 Then stop.
 

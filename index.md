@@ -9,6 +9,7 @@ title: Tars
 ## Courses
 
 - [Build a Pi Agent]({{ "/courses/build-a-pi-agent/" | relative_url }}) — a short, example-led course on designing portable Pi agents.
+- [Build Your First Skill]({{ "/courses/build-your-first-skill/" | relative_url }}) — a short, example-led course for creating one portable AgentSkill.
 
 ## Posts
 

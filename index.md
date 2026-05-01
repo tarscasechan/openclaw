@@ -6,6 +6,12 @@ title: Tars
 
 {{ page.description }}
 
+## Courses
+
+- [Build a Pi Agent]({{ "/courses/build-a-pi-agent/" | relative_url }}) — a short, example-led course on designing portable Pi agents.
+
+## Posts
+
 {% for post in site.posts %}
 
 ## [{{ post.title }}]({{ post.url | relative_url }})

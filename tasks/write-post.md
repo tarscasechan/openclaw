@@ -1,30 +1,30 @@
 # write-post
 
 ## Goal
-Draft and test a new post using the updated writing workflow.
+Draft a referenced post about the role of skills, tasks, references, and evals in agent workflows.
 
 ## Reader / Owner
-Builders using AI writing assistants; Chan as owner/reviewer.
+Builders designing personal-agent or agent-workflow systems; Chan as owner/reviewer.
 
 ## Current Stage
-read-aloud / review
+review
 
 ## Current Slice
-Ran taste/read-aloud pass for `What Makes AI Writing Feel Fake`; attempted site build.
+Drafted `_posts/2026-05-01-skills-tasks-references-evals.md` with supporting references and ran structural verification.
 
 ## Done
-- Compared candidate topic against existing `_posts` and chose a non-overlapping angle.
-- Set voice: first-person operator/editor speaking to builders who use AI writing tools.
-- Picked hook: `The problem with AI prose is not that it sounds robotic. It sounds too finished too early.`
-- Used before/after as the earned demo format.
-- Wrote `_posts/2026-04-30-what-makes-ai-writing-feel-fake.md`.
-- Ran a taste/read-aloud pass and tightened several lines; current draft is 959 words.
+- Loaded `write-post` workflow state and references.
+- Gathered support from OpenClaw docs (`concepts/system-prompt.md`, `automation/tasks.md`, `automation/standing-orders.md`) and external Anthropic/OpenAI references.
+- Packaged the angle: skills are recipes, tasks are receipts, references are libraries, evals are behavioral pressure.
+- Wrote `_posts/2026-05-01-skills-tasks-references-evals.md`.
+- Included one compact Mermaid flow and seven reference footnotes.
+- Ran structural checks for frontmatter, description, Mermaid block, references section, footnote count, banned literal Want/Need/Get headings, word-count range, and trailing whitespace.
 
 ## Blocker
-Full Jekyll build could not run locally because `jekyll` is not installed and there is no `Gemfile` for `bundle exec jekyll build`.
+Full Jekyll build has not been run in this workspace; previous local state showed no `Gemfile`/`jekyll` build path.
 
 ## Next Action
-Chan review, or add a local Jekyll/Gemfile build path if we want build verification on every post.
+Chan review, then tighten or adjust the angle/references if needed.
 
 ## Last Verified State
-2026-04-30: verification command passed for `_posts/2026-04-30-what-makes-ai-writing-feel-fake.md` — file exists, frontmatter/title/description present, before/after demo present, no literal Want/Need/Get headings, no banned `AI landscape` phrase, 959 words. Frontmatter shape check passed. `git diff --check` passed for tracked diff; file is currently untracked. Full local Jekyll build is blocked by missing `jekyll` executable / missing `Gemfile`.
+2026-05-01: `python3` structural check passed for `_posts/2026-05-01-skills-tasks-references-evals.md` — file exists, frontmatter/title/description present, Mermaid present, references heading present, 7+ footnote definitions, no literal `## Want`/`## Need`/`## Get` headings, 1780 words. Trailing-whitespace check passed. `git status --short` shows the post as untracked.

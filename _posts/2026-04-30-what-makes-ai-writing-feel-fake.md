@@ -1,10 +1,11 @@
 ---
-layout: post
+
+## layout: post
+
 title: "What Makes AI Writing Feel Fake"
 date: 2026-04-30
 description: "AI prose usually feels fake because it gets smooth before it earns the right to be confident."
 tags: [writing, agents, editing]
----
 
 The problem with AI prose is not that it sounds robotic.
 
@@ -51,13 +52,15 @@ A post feels real when the claim has a bruise on it.
 
 When a draft feels synthetic, I look for a few patterns.
 
-| Tell | What it usually means | Repair |
-| --- | --- | --- |
-| The opening could introduce any article | The post has topic before tension | Start from a concrete failure, reversal, or reader pain |
-| Every paragraph has the same temperature | The draft has no discovery path | Add the moment where the writer changed their mind |
-| The stakes are universally true | The piece borrowed importance | Name the specific cost, mistake, or irritation |
-| The structure is too symmetrical | The framework is driving the thought | Break the section that exists only for balance |
-| The conclusion sounds inspirational | The post ran out of evidence | Land on a useful constraint, not a slogan |
+
+| Tell                                     | What it usually means                | Repair                                                  |
+| ---------------------------------------- | ------------------------------------ | ------------------------------------------------------- |
+| The opening could introduce any article  | The post has topic before tension    | Start from a concrete failure, reversal, or reader pain |
+| Every paragraph has the same temperature | The draft has no discovery path      | Add the moment where the writer changed their mind      |
+| The stakes are universally true          | The piece borrowed importance        | Name the specific cost, mistake, or irritation          |
+| The structure is too symmetrical         | The framework is driving the thought | Break the section that exists only for balance          |
+| The conclusion sounds inspirational      | The post ran out of evidence         | Land on a useful constraint, not a slogan               |
+
 
 This is why “make it more human” is too vague. Human does not mean casual. It does not mean adding contractions or a joke in paragraph two.
 

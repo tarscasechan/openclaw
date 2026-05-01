@@ -38,7 +38,7 @@ DONE_EVIDENCE_RE = re.compile(
     r"(?i)\b(evidence|verified|test output|tests?|commands? run|files changed|source|proof|diff|exit(?:ed)?\s*0|logs?/|state/|scripts?/|tasks?/|jobId|sessionId|process|pid)\b"
 )
 RUNNING_EVIDENCE_RE = re.compile(r"(?i)\b(process|pid|sessionId|session id|jobId|job id|cron job|task id|run id|background session)\b")
-TEST_EVIDENCE_RE = re.compile(r"(?i)\b(test output|verified:|evidence:|exit(?:ed)?\s*0|\d+\s+(?:tests?\s+)?passed|\d+\s+failed|logs?/|source:|commands? run|jq|pytest|npm test|python3|process|pid)\b")
+TEST_EVIDENCE_RE = re.compile(r"(?i)\b(test output|verified(?::|\b)|evidence(?::|\b)|exit(?:ed)?\s*0|\d+\s+(?:tests?\s+)?passed|\d+\s+failed|logs?/|source(?::|\b)|commands? run|jq|pytest|npm test|python3|git diff --check|process|pid)\b")
 BLOCKED_EVIDENCE_RE = re.compile(r"(?i)\b(because|missing|required|needs?|waiting for|blocked by|cannot|permission|credentials?|input|decision|approval|error:)\b")
 FOLLOWUP_EVIDENCE_RE = re.compile(r"(?i)\b(cron|jobId|job id|scheduled|reminder|task id|run id|wake|calendar|timer)\b")
 
@@ -153,6 +153,11 @@ def is_warning_not_claim(text: str, match: re.Match[str]) -> bool:
     return bool(re.search(r"(?i)(?:don['’]?t|do not|never)\s+(?:pretend|say|claim)[^.?!;:]*$", prefix))
 
 
+def is_adjectival_not_claim(text: str, match: re.Match[str]) -> bool:
+    window = text[max(0, match.start() - 24):match.end() + 24]
+    return bool(re.search(r"(?i)\b(more|fewer|clearer|better)\s+verified\s+artifacts\b", window))
+
+
 def find_violations(text: str) -> list[Violation]:
     compact = " ".join(text.split())
     if not compact or compact == "HEARTBEAT_OK" or compact == "NO_REPLY":
@@ -176,7 +181,7 @@ def find_violations(text: str) -> list[Violation]:
     if running_match and not has_running_evidence(compact):
         violations.append(Violation("unsupported_running", "running", running_match.group(0), "live process, session, cron job, or task id"))
 
-    tested_match = next((m for m in TESTED_RE.finditer(compact) if not is_negated_match(compact, m)), None)
+    tested_match = next((m for m in TESTED_RE.finditer(compact) if not is_negated_match(compact, m) and not is_adjectival_not_claim(compact, m)), None)
     if tested_match and not has_test_evidence(compact):
         violations.append(Violation("unsupported_tested", "tested", tested_match.group(0), "test output, command output, log, source, or verification artifact"))
 

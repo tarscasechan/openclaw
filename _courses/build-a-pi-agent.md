@@ -1,10 +1,10 @@
 ---
-
-## layout: default
-
+layout: default
 title: Build a Pi Agent
-permalink: /courses/build-a-pi-agent/
 description: A short, example-led course on designing portable Pi agents.
+permalink: /courses/build-a-pi-agent/
+order: 1
+---
 
 # Build a Pi Agent
 

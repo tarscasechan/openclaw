@@ -1,10 +1,10 @@
 ---
-
-## layout: default
-
+layout: default
 title: Build Your First Skill
-permalink: /courses/build-your-first-skill/
 description: A short, example-led course for creating one useful AgentSkill that triggers reliably.
+permalink: /courses/build-your-first-skill/
+order: 2
+---
 
 # Build Your First Skill
 

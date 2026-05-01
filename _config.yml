@@ -4,6 +4,11 @@ author: Michael Chan
 copyright_year: 2026
 baseurl: "/openclaw"
 permalink: /:title/
+
+collections:
+  courses:
+    output: true
+    permalink: /courses/:path/
 github:
   owner: tarscasechan
   repo: openclaw

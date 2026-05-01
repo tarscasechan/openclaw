@@ -158,6 +158,14 @@ def is_adjectival_not_claim(text: str, match: re.Match[str]) -> bool:
     return bool(re.search(r"(?i)\b(more|fewer|clearer|better)\s+verified\s+artifacts\b", window))
 
 
+def is_slash_list_label(text: str, match: re.Match[str]) -> bool:
+    # Treat slash-delimited labels like "checked/inspected/audited rule" as
+    # taxonomy text, not an assistant claim that the work was checked.
+    before = text[match.start() - 1] if match.start() > 0 else ""
+    after = text[match.end()] if match.end() < len(text) else ""
+    return before == "/" or after == "/"
+
+
 def find_violations(text: str) -> list[Violation]:
     compact = " ".join(text.split())
     if not compact or compact == "HEARTBEAT_OK" or compact == "NO_REPLY":
@@ -181,7 +189,7 @@ def find_violations(text: str) -> list[Violation]:
     if running_match and not has_running_evidence(compact):
         violations.append(Violation("unsupported_running", "running", running_match.group(0), "live process, session, cron job, or task id"))
 
-    tested_match = next((m for m in TESTED_RE.finditer(compact) if not is_negated_match(compact, m) and not is_adjectival_not_claim(compact, m)), None)
+    tested_match = next((m for m in TESTED_RE.finditer(compact) if not is_negated_match(compact, m) and not is_adjectival_not_claim(compact, m) and not is_slash_list_label(compact, m)), None)
     if tested_match and not has_test_evidence(compact):
         violations.append(Violation("unsupported_tested", "tested", tested_match.group(0), "test output, command output, log, source, or verification artifact"))
 

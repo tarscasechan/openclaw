@@ -142,5 +142,11 @@
     "expect_codes": [
       "unsupported_tested"
     ]
+  },
+  {
+    "id": "slash_delimited_checked_rule_label_passes",
+    "text": "Commit created and pushed: `e1bce06` \u2014 `proof-gate: add checked/inspected/audited rule`",
+    "expect_ok": true,
+    "expect_codes": []
   }
 ]

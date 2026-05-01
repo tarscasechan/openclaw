@@ -166,6 +166,14 @@ def is_slash_list_label(text: str, match: re.Match[str]) -> bool:
     return before == "/" or after == "/"
 
 
+def is_modal_passive_done(text: str, match: re.Match[str]) -> bool:
+    # Design advice like "the pack can be installed by copying files" is a
+    # hypothetical capability, not an assistant claim that something is already
+    # installed. Concrete state claims like "Ollama is installed" still fail.
+    prefix = text[max(0, match.start() - 80):match.start()]
+    return bool(re.search(r"(?i)\b(?:can|could|should|would|may|might)\s+(?:\w+\s+){0,5}be\s*$", prefix))
+
+
 def find_violations(text: str) -> list[Violation]:
     compact = " ".join(text.split())
     if not compact or compact == "HEARTBEAT_OK" or compact == "NO_REPLY":
@@ -182,7 +190,7 @@ def find_violations(text: str) -> list[Violation]:
 
     done_match = DONE_RE.search(compact)
     conditional_done = bool(re.search(r"(?i)\b(once|when|after)\b.{0,80}\bdone\b", compact))
-    if done_match and not conditional_done and not has_done_evidence(compact):
+    if done_match and not conditional_done and not is_modal_passive_done(compact, done_match) and not has_done_evidence(compact):
         violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
     running_match = next((m for m in RUNNING_RE.finditer(compact) if not is_negated_match(compact, m) and not is_warning_not_claim(compact, m)), None)

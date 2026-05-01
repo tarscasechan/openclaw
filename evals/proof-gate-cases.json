@@ -102,6 +102,12 @@
     ]
   },
   {
+    "id": "modal_passive_installed_design_advice_passes",
+    "text": "The pack can be installed into any OpenClaw machine by copying the workspace files and choosing whatever local model is available.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
     "id": "live_running_without_process_fails",
     "text": "I got Ollama running. The remaining blocker is Ollama cloud auth for web search.",
     "expect_ok": false,
@@ -148,5 +154,13 @@
     "text": "Commit created and pushed: `e1bce06` \u2014 `proof-gate: add checked/inspected/audited rule`",
     "expect_ok": true,
     "expect_codes": []
+  },
+  {
+    "id": "subagent_smoke_test_without_run_id_fails",
+    "text": "I stress-tested the course by building `courses/examples/triage-clerk-agent/`. Smoke test passed. I ran the smoke-test via sub-agent.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_tested"
+    ]
   }
 ]

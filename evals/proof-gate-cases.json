@@ -220,5 +220,13 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "commit_created_pushed_without_verification_fails",
+    "text": "New commits created and pushed:\n\n- `88a40f1` Add beginner React component course and example project",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

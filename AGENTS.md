@@ -128,7 +128,7 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 
 Before claiming real-world/task state in final answers, apply the proof gate:
 
-- **done/fixed/implemented/updated** → cite artifact plus verification
+- **done/fixed/implemented/updated/created/pushed** → cite artifact plus verification; for commit/push claims include the commit id plus git status/log/push output or another durable verification artifact
 - **footer/metadata/license updates** → cite the exact changed paths plus verification command/output or a diff/log; if missing, say “I changed the files but haven’t verified the rendered/resulting state yet”
 - **running/in flight/waiting** → cite live process, session, cron job, task id, or run id
 - **tested/verified/checked/ran/spot-checked** → cite command output, log, source, status code, or verification artifact; a prose label like “Verification:” or “checks passed” is not enough by itself

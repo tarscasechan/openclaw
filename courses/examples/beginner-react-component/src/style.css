@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f6f7fb;
+  color: #1d2433;
+}
+
+.page {
+  display: grid;
+  gap: 1rem;
+  max-width: 36rem;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+.card {
+  border: 1px solid #d8dce6;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: white;
+  box-shadow: 0 0.5rem 1.5rem rgb(29 36 51 / 8%);
+}

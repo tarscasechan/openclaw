@@ -129,9 +129,11 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 Before claiming real-world/task state in final answers, apply the proof gate:
 
 - **done/fixed/implemented/updated** → cite artifact plus verification
+- **footer/metadata/license updates** → cite the exact changed paths plus verification command/output or a diff/log; if missing, say “I changed the files but haven’t verified the rendered/resulting state yet”
 - **running/in flight/waiting** → cite live process, session, cron job, task id, or run id
-- **tested/verified/checked/ran/spot-checked** → cite command output, log, source, status code, or verification artifact
+- **tested/verified/checked/ran/spot-checked** → cite command output, log, source, status code, or verification artifact; a prose label like “Verification:” or “checks passed” is not enough by itself
 - **sub-agent smoke tests/evals/reviews** → cite the sub-agent session/job id, transcript/log path, or exact captured output; otherwise say “I haven’t verified this yet”
+- **isolated harness / smoke-test PASS claims** → `PASS`, labels covered, or “read-only harness” is not enough by itself; include captured output, command, transcript/log path, or downgrade
 - **checked/inspected/audited an existing list/file/state** → cite the exact source path, command output, log, or say “I haven’t verified this yet”
 - **blocked/stuck** → name the specific missing input, permission, state, error, or decision
 - **I'll follow up/check later** → create or cite a cron job/reminder/durable task

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "agents": {
+    "course-builder": {
+      "packDir": "agents/course-builder",
+      "requiredFiles": ["agent.md", "AGENTS.md", "SOUL.md", "evals/checklist.md", "examples/brief.md"],
+      "requiredPhrases": ["Runtime target: Pi-compatible agent loop", "Model class:", "OpenClaw Adapter", "5-8 lessons", "Smoke test", "Cut list / next courses", "_courses/", "courses/examples/", "skills/", "agents/"]
+    },
+    "lesson-loom": {
+      "packDir": "agents/lesson-loom",
+      "requiredFiles": ["agent.md", "AGENTS.md", "SOUL.md", "evals/checklist.md", "examples/planning-brief.md"],
+      "requiredPhrases": ["Runtime target: Pi-compatible agent loop", "Model class:", "OpenClaw Adapter", "Course ladder", "Eval path", "Placement", "_courses/", "courses/examples/", "skills/", "agents/"]
+    }
+  },
+  "cases": [
+    {
+      "id": "first-skill-course",
+      "agent": "course-builder",
+      "prompt": "Build a short example-led course for a technical builder creating their first portable AgentSkill. The first artifact should be tldr-skill/SKILL.md. Keep personalization for a later course.",
+      "requiredSections": ["Course", "Artifact", "Smoke test", "Eval checklist", "Cut list", "Verification"],
+      "lessonRange": [5, 8],
+      "requiresButHooks": true,
+      "requiredPhrases": ["tldr-skill", "failure", "Caveat"]
+    },
+    {
+      "id": "pi-agent-ladder",
+      "agent": "lesson-loom",
+      "prompt": "Plan a course ladder for builders learning to create portable Pi agents and skills. Include the core free course, connected eval/model-comparison upsells, and where public courses versus durable framework agents belong.",
+      "requiredSections": ["Learner", "Promise", "Artifact", "Course ladder", "Lesson spine", "Eval path", "Cut list", "Placement"],
+      "lessonRange": [5, 8],
+      "requiresButHooks": false,
+      "requiredPhrases": ["undirected", "cross-model", "_courses/", "agents/"]
+    },
+    {
+      "id": "eval-upsell-course",
+      "agent": "lesson-loom",
+      "prompt": "Design the next course after Build Your First Skill: creating and running evals, comparing skill-guided output to an undirected model, and comparing across models to assess model requirements.",
+      "requiredSections": ["Learner", "Promise", "Artifact", "Course ladder", "Lesson spine", "Eval path", "Cut list", "Placement"],
+      "lessonRange": [5, 8],
+      "requiresButHooks": false,
+      "requiredPhrases": ["undirected", "cross-model", "model requirements", "eval"]
+    }
+  ]
+}

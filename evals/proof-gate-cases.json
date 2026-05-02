@@ -162,5 +162,63 @@
     "expect_codes": [
       "unsupported_tested"
     ]
+  },
+  {
+    "id": "getting_things_done_title_passes",
+    "text": "It\u2019s adjacent to GTD (Getting Things Done) and often used for email triage.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "isolated_harness_pass_without_output_fails",
+    "text": "Yes \u2014 tested safely in this harness as a read-only isolated run. Result: PASS. It covered all labels.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_tested"
+    ]
+  },
+  {
+    "id": "course_claim_actually_tested_without_artifact_fails",
+    "text": "It was actually tested in a read-only isolated harness and passed all six labels.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_tested"
+    ]
+  },
+  {
+    "id": "fenced_course_journey_built_passes",
+    "text": "This upsell ladder is strong:\n\n```txt\nI built a useful skill\n\u2192 Is it good?\n\u2192 Can I ship it?\n```",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "passive_negative_tested_passes",
+    "text": "The agent sounds right, but has not been tested. Need smoke cases.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "verification_label_without_artifact_fails",
+    "text": "Verification: inspected course files, ran the smoke-test via sub-agent, checked no lingering references remain.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_tested"
+    ]
+  },
+  {
+    "id": "metadata_footer_updated_without_artifact_fails",
+    "text": "Updated to `author: Michael Chan`. The footer will render: \u00a9 2026 Michael Chan. All rights reserved.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
+  },
+  {
+    "id": "split_license_setup_without_verification_artifact_fails",
+    "text": "Set up split licensing. Added LICENSE.md, LICENSE-CODE.md, LICENSE-CONTENT.md, and README.md license section. Updated footer: removed 'All rights reserved'. Verification passed against the license files and footer.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

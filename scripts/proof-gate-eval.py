@@ -93,8 +93,14 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
 
 
+def strip_non_claim_sections(text: str) -> str:
+    # Fenced code blocks often contain examples, templates, or user-facing copy.
+    # Do not treat claim words inside them as assistant claims about completed work.
+    return re.sub(r"(?s)```.*?```", " ", text or "")
+
+
 def compact_text(text: str) -> str:
-    return " ".join((text or "").split())
+    return " ".join(strip_non_claim_sections(text).split())
 
 
 def text_fingerprint(text: str) -> str:
@@ -145,7 +151,7 @@ def has_followup_evidence(text: str) -> bool:
 
 def is_negated_match(text: str, match: re.Match[str]) -> bool:
     prefix = text[max(0, match.start() - 24):match.start()]
-    return bool(re.search(r"(?i)(?:\bnot\b|\bno\b|haven['’]?t\s+|hasn['’]?t\s+|isn['’]?t\s+|wasn['’]?t\s+|weren['’]?t\s+)\s*$", prefix))
+    return bool(re.search(r"(?i)(?:\bnot\b|\bno\b|haven['’]?t\s+|hasn['’]?t\s+|isn['’]?t\s+|wasn['’]?t\s+|weren['’]?t\s+|has\s+not\s+been\s+|have\s+not\s+been\s+|had\s+not\s+been\s+)\s*$", prefix))
 
 
 def is_warning_not_claim(text: str, match: re.Match[str]) -> bool:
@@ -174,8 +180,15 @@ def is_modal_passive_done(text: str, match: re.Match[str]) -> bool:
     return bool(re.search(r"(?i)\b(?:can|could|should|would|may|might)\s+(?:\w+\s+){0,5}be\s*$", prefix))
 
 
+def is_getting_things_done_title(text: str, match: re.Match[str]) -> bool:
+    # The productivity-book title "Getting Things Done" is a reference, not an
+    # assistant completion claim.
+    window = text[max(0, match.start() - 24):match.end() + 24]
+    return bool(re.search(r"(?i)getting\s+things\s+done", window))
+
+
 def find_violations(text: str) -> list[Violation]:
-    compact = " ".join(text.split())
+    compact = compact_text(text)
     if not compact or compact == "HEARTBEAT_OK" or compact == "NO_REPLY":
         return []
 
@@ -190,7 +203,7 @@ def find_violations(text: str) -> list[Violation]:
 
     done_match = DONE_RE.search(compact)
     conditional_done = bool(re.search(r"(?i)\b(once|when|after)\b.{0,80}\bdone\b", compact))
-    if done_match and not conditional_done and not is_modal_passive_done(compact, done_match) and not has_done_evidence(compact):
+    if done_match and not conditional_done and not is_modal_passive_done(compact, done_match) and not is_getting_things_done_title(compact, done_match) and not has_done_evidence(compact):
         violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
     running_match = next((m for m in RUNNING_RE.finditer(compact) if not is_negated_match(compact, m) and not is_warning_not_claim(compact, m)), None)

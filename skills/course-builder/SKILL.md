@@ -1,13 +1,11 @@
 ---
 name: course-builder
-description: Build short, example-led courses for learning a topic. Use when creating, revising, stress-testing, or packaging a course/curriculum with progressive lessons, curiosity hooks, tiny examples, and a repeatable learning loop.
+description: Build, revise, stress-test, or package short example-led courses. Use when creating a 5-8 lesson course, lesson plan, curriculum slice, course artifact, smoke test, eval checklist, pain chain, or cut/next-course list.
 ---
 
 # Course Builder
 
-## Goal
-
-Create a short course that helps the learner build one useful thing while discovering each next concept through a real gap.
+Build short courses where the learner makes one useful thing and discovers each next concept through a real gap.
 
 Default course length: 5-8 lessons.
 
@@ -24,7 +22,7 @@ For every lesson:
 Spine:
 
 ```txt
-make a thing → hit a pain → add one concept
+make a thing → hit a pain → add one concept → test → tease the next gap
 ```
 
 ## Start
@@ -35,15 +33,15 @@ Ask for or infer:
 - Learner goal
 - Starting knowledge
 - Desired artifact
-- Constraints: length, tone, platform, time
+- Constraints: length, tone, platform, time, public/private destination
 
 If one missing fact blocks the course, ask one question. Otherwise assume and proceed.
 
-## Pick the “hello world” artifact
+## Pick the nail
 
-Choose a quintessential example that gives the learner a nail, not just a hammer.
+Choose a first artifact that is a nail, not just a hammer.
 
-The artifact must be:
+It must be:
 
 - Useful on its own, even if tiny
 - Representative of the real work the learner wants to do
@@ -51,9 +49,9 @@ The artifact must be:
 - Specific enough to have stakes, taste, or judgment
 - Testable with one happy path and one failure/edge case
 
-Reject examples that are merely mechanical demos. If the learner would finish thinking “now I need to find an application,” the artifact is too toy-like. Prefer a small real use case over a generic hello-world.
+Reject merely mechanical demos. If the learner finishes thinking “now I need to find an application,” the artifact is too toy-like.
 
-Good first artifacts are boring-useful: a bug report formatter, commit message skill, inbox sorter, polite refusal draft, tiny explainer, or config checker.
+Good first artifacts are boring-useful: a bug report formatter, commit message skill, inbox sorter, polite refusal draft, tiny explainer, config checker, or honest TL;DR.
 
 ## Lesson anatomy
 
@@ -80,16 +78,16 @@ Title rules:
 - Verb-led
 - Outcome-based
 - Includes the key concept word
-- No cleverness at the cost of clarity
+- Clear before clever
 
 ## Progression rules
 
 - One concept per lesson.
 - No exhaustive explanation.
 - No concept appears before the pain that earns it.
-- If a concept is useful but not needed for the first win, move it to bonus/paid/advanced.
+- Introduce a failure case early.
 - Prefer concrete return signatures, file shapes, or expected outputs over prose advice.
-- Introduce a failure case early; good courses teach what to do when the happy path breaks.
+- Move useful-but-not-needed material to `Cut list / Next courses`.
 
 ## Stress-test loop
 
@@ -132,7 +130,7 @@ For a new course, produce:
 - Minimal example artifact
 - Smoke test
 - Checklist/eval
-- Notes on cut/advanced material
+- Cut list / next courses
 
 For a revision, produce:
 
@@ -140,3 +138,5 @@ For a revision, produce:
 - Which pain/gap improved
 - What was cut or moved later
 - Verification performed
+
+For a site course in this workspace, use `_courses/` for public course pages and keep course-specific examples under `courses/examples/`. Do not hide durable framework skills under course examples.

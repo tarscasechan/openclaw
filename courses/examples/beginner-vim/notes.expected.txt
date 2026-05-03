@@ -1,0 +1,4 @@
+Today I learned Vim.
+Vim is modal.
+Escape returns to normal mode.
+Search finds words quickly.

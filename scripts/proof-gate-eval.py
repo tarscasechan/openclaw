@@ -103,6 +103,15 @@ def compact_text(text: str) -> str:
     return " ".join(strip_non_claim_sections(text).split())
 
 
+def strip_quoted_fragments(text: str) -> str:
+    # Inline code and quoted phrases are often commit subjects or examples, not
+    # live assistant claims. Keep the surrounding prose auditable.
+    text = re.sub(r"`[^`]*`", " ", text or "")
+    text = re.sub(r'"[^"]*"', " ", text)
+    text = re.sub(r"“[^”]*”", " ", text)
+    return text
+
+
 def text_fingerprint(text: str) -> str:
     return hashlib.sha1(compact_text(text).encode("utf-8")).hexdigest()[:12]
 
@@ -206,7 +215,8 @@ def find_violations(text: str) -> list[Violation]:
     if done_match and not conditional_done and not is_modal_passive_done(compact, done_match) and not is_getting_things_done_title(compact, done_match) and not has_done_evidence(compact):
         violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
-    running_match = next((m for m in RUNNING_RE.finditer(compact) if not is_negated_match(compact, m) and not is_warning_not_claim(compact, m)), None)
+    running_text = strip_quoted_fragments(compact)
+    running_match = next((m for m in RUNNING_RE.finditer(running_text) if not is_negated_match(running_text, m) and not is_warning_not_claim(running_text, m)), None)
     if running_match and not has_running_evidence(compact):
         violations.append(Violation("unsupported_running", "running", running_match.group(0), "live process, session, cron job, or task id"))
 

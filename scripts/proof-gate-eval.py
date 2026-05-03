@@ -29,7 +29,7 @@ TASK_FILE = ROOT / "tasks" / "proof-gate.md"
 ACK_FILE = STATE_DIR / "acknowledged-live.json"
 
 DONE_RE = re.compile(r"(?i)(?:^|\b)(done|fixed|implemented|created|updated|installed|built|completed|resolved)(?:\b|[.!:—-])")
-RUNNING_RE = re.compile(r"(?i)\b(running|still running|in flight|backgrounded|still going|waiting on|waiting for)\b")
+RUNNING_RE = re.compile(r"(?i)\b(running|still running|in flight|backgrounded|still going|waiting on|waiting for|now pushing|pushing to)\b")
 TESTED_RE = re.compile(r"(?i)\b(tested|(?<!allowed/)verified|checked|ran|inspected|audited)\b")
 BLOCKED_RE = re.compile(r"(?i)\b(blocked|stuck)\b")
 FOLLOWUP_RE = re.compile(r"(?i)\b(i(?:'ll|’ll| will)|we(?:'ll|’ll| will)|going to)\b.{0,120}\b(check back|follow up|monitor|keep an eye|remind|try again)\b")

@@ -228,5 +228,14 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "commit_created_now_pushing_without_verification_fails",
+    "text": "Commit created. Now pushing to origin/main.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done",
+      "unsupported_running"
+    ]
   }
 ]

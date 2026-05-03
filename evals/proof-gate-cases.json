@@ -237,5 +237,13 @@
       "unsupported_done",
       "unsupported_running"
     ]
+  },
+  {
+    "id": "let_me_commit_and_push_without_evidence_fails",
+    "text": "Let me commit and push.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_running"
+    ]
   }
 ]

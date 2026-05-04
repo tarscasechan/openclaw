@@ -245,5 +245,22 @@
     "expect_codes": [
       "unsupported_running"
     ]
+  },
+  {
+    "id": "let_me_push_to_origin_without_process_fails",
+    "text": "Now let me push to origin/main.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_running"
+    ]
+  },
+  {
+    "id": "commit_created_successfully_now_pushing_without_verification_fails",
+    "text": "Commit created successfully. Now pushing to origin/main.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done",
+      "unsupported_running"
+    ]
   }
 ]

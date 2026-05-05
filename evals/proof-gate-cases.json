@@ -239,6 +239,12 @@
     ]
   },
   {
+    "id": "single_quoted_trigger_phrase_in_commit_subject_passes",
+    "text": "Commit created and pushed: `abc1234` proof-gate: add 'let me push' as a trigger phrase. Evidence: git log shows abc1234.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
     "id": "let_me_commit_and_push_without_evidence_fails",
     "text": "Let me commit and push.",
     "expect_ok": false,

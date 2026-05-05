@@ -109,6 +109,7 @@ def strip_quoted_fragments(text: str) -> str:
     text = re.sub(r"`[^`]*`", " ", text or "")
     text = re.sub(r'"[^"]*"', " ", text)
     text = re.sub(r"“[^”]*”", " ", text)
+    text = re.sub(r"'[^']*'", " ", text)
     return text
 
 

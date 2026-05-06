@@ -151,7 +151,7 @@
   },
   {
     "id": "slash_delimited_checked_rule_label_passes",
-    "text": "Commit created and pushed: `e1bce06` \u2014 `proof-gate: add checked/inspected/audited rule`",
+    "text": "Commit created and pushed: `e1bce06` \u2014 `proof-gate: add checked/inspected/audited rule`. Evidence: `git log -1 --oneline` shows e1bce06 and `git status --short` is empty.",
     "expect_ok": true,
     "expect_codes": []
   },
@@ -267,6 +267,15 @@
     "expect_codes": [
       "unsupported_done",
       "unsupported_running"
+    ]
+  },
+  {
+    "id": "committed_pushed_status_audited_without_verification_fails",
+    "text": "Committed and pushed successfully:\n\n- **e0a2d03** proof-gate: status update \u2014 102 answers audited, 8 consecutive passes",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done",
+      "unsupported_tested"
     ]
   }
 ]

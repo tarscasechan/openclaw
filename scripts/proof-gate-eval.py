@@ -28,14 +28,14 @@ STATE_FILE = STATE_DIR / "state.json"
 TASK_FILE = ROOT / "tasks" / "proof-gate.md"
 ACK_FILE = STATE_DIR / "acknowledged-live.json"
 
-DONE_RE = re.compile(r"(?i)(?:^|\b)(done|fixed|implemented|created|updated|installed|built|completed|resolved)(?:\b|[.!:—-])")
+DONE_RE = re.compile(r"(?i)(?:^|\b)(done|fixed|implemented|created|updated|installed|built|completed|resolved|committed|pushed)(?:\b|[.!:—-])")
 RUNNING_RE = re.compile(r"(?i)\b(running|still running|in flight|backgrounded|still going|waiting on|waiting for|now pushing|pushing to|let me commit and push|let me push)\b")
 TESTED_RE = re.compile(r"(?i)\b(tested|(?<!allowed/)verified|checked|ran|inspected|audited)\b")
 BLOCKED_RE = re.compile(r"(?i)\b(blocked|stuck)\b")
 FOLLOWUP_RE = re.compile(r"(?i)\b(i(?:'ll|’ll| will)|we(?:'ll|’ll| will)|going to)\b.{0,120}\b(check back|follow up|monitor|keep an eye|remind|try again)\b")
 
 DONE_EVIDENCE_RE = re.compile(
-    r"(?i)\b(evidence|verified|test output|tests?|commands? run|files changed|source|proof|diff|exit(?:ed)?\s*0|logs?/|state/|scripts?/|tasks?/|jobId|sessionId|process|pid)\b"
+    r"(?i)\b(evidence|verified|test output|tests?|commands? run|files changed|source|diff|exit(?:ed)?\s*0|logs?/|state/|scripts?/|tasks?/|jobId|sessionId|process|pid)\b"
 )
 RUNNING_EVIDENCE_RE = re.compile(r"(?i)\b(process|pid|sessionId|session id|jobId|job id|cron job|task id|run id|background session)\b")
 TEST_EVIDENCE_RE = re.compile(r"(?i)\b(test output|verified(?::|\b)|evidence(?::|\b)|exit(?:ed)?\s*0|\d+\s+(?:tests?\s+)?passed|\d+\s+failed|logs?/|source(?::|\b)|commands? run|jq|pytest|npm test|python3|git diff --check|process|pid)\b")

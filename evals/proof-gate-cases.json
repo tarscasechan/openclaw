@@ -277,5 +277,19 @@
       "unsupported_done",
       "unsupported_tested"
     ]
+  },
+  {
+    "id": "committed_and_pushed_commit_id_without_verification_fails",
+    "text": "Committed and pushed:\n\n- `07aa488` \u2014 chore: update proof-gate metrics",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
+  },
+  {
+    "id": "committed_and_pushed_commit_id_with_git_verification_passes",
+    "text": "Committed and pushed: `07aa488` \u2014 chore: update proof-gate metrics. Evidence: `git log -1 --oneline` showed 07aa488 and `git status --short` was empty after push output reported up to date.",
+    "expect_ok": true,
+    "expect_codes": []
   }
 ]

@@ -39,7 +39,7 @@ DONE_EVIDENCE_RE = re.compile(
 )
 RUNNING_EVIDENCE_RE = re.compile(r"(?i)\b(process|pid|sessionId|session id|jobId|job id|cron job|task id|run id|background session)\b")
 TEST_EVIDENCE_RE = re.compile(r"(?i)\b(test output|verified(?::|\b)|evidence(?::|\b)|exit(?:ed)?\s*0|\d+\s+(?:tests?\s+)?passed|\d+\s+failed|logs?/|source(?::|\b)|commands? run|jq|pytest|npm test|python3|git diff --check|process|pid)\b")
-BLOCKED_EVIDENCE_RE = re.compile(r"(?i)\b(because|missing|required|needs?|waiting for|blocked by|cannot|permission|credentials?|input|decision|approval|error:)\b")
+BLOCKED_EVIDENCE_RE = re.compile(r"(?i)\b(because|missing|required|needs?|waiting for|blocked by|cannot|permission|credentials?|input|decision|approval|error:|invalid_grant|oauth|auth(?:entication)?|token|expired|revoked|re-auth)\b")
 FOLLOWUP_EVIDENCE_RE = re.compile(r"(?i)\b(cron|jobId|job id|scheduled|reminder|task id|run id|wake|calendar|timer)\b")
 
 # Phrases used in explanation or code examples should not be treated as claims.

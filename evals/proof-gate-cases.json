@@ -287,6 +287,26 @@
     ]
   },
   {
+    "id": "bare_commit_hash_title_with_committed_subject_without_verification_fails",
+    "text": "- `6047012` \u2014 fix: proof-gate status passing \u2014 add committed/pushed eval cases, update metrics",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
+  },
+  {
+    "id": "blocked_gmail_oauth_expired_revoked_passes",
+    "text": "[blocked] Gmail access failed: OAuth refresh token is expired or revoked, so I couldn\u2019t search/process unread Inbox messages. Re-auth is needed for `tarscasechan@gmail.com`.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "blocked_invalid_grant_error_passes",
+    "text": "Blocked: Gmail OAuth token is expired/revoked. Gmail error: `oauth2: invalid_grant Token has been expired or revoked.`",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
     "id": "committed_and_pushed_commit_id_with_git_verification_passes",
     "text": "Committed and pushed: `07aa488` \u2014 chore: update proof-gate metrics. Evidence: `git log -1 --oneline` showed 07aa488 and `git status --short` was empty after push output reported up to date.",
     "expect_ok": true,

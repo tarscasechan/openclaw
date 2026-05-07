@@ -328,5 +328,13 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "two_commits_created_and_pushed_without_verification_fails",
+    "text": "Two commits created and pushed:\n\n1. `2431077` \u2014 chore: tighten proof-gate for commit/push claims and add eval cases\n2. `9ddb8b6` \u2014 chore: update proof-gate task metrics",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

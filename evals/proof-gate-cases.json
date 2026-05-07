@@ -311,5 +311,22 @@
     "text": "Committed and pushed: `07aa488` \u2014 chore: update proof-gate metrics. Evidence: `git log -1 --oneline` showed 07aa488 and `git status --short` was empty after push output reported up to date.",
     "expect_ok": true,
     "expect_codes": []
+  },
+  {
+    "id": "live_commit_created_pushing_without_verification_fails",
+    "text": "Commit created. Pushing to origin/main.\n\n",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done",
+      "unsupported_running"
+    ]
+  },
+  {
+    "id": "live_new_commit_created_and_pushed_without_verification_fails",
+    "text": "New commit created and pushed:\n- **271d932** \u2014 fix: proof-gate evals passing \u2014 add OAuth blocked cases, widen blocked regex, update metrics",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

@@ -88,3 +88,8 @@ Uninstalled (unconfigured):
 
 <!-- openclaw-memory-promotion:memory:memory/2026-04-29.md:33:33 -->
 - - Corrected course after overfitting: restored `SOUL.md` back to the original Chan principles (communicate tersely, assume competence, disclose progressively, choose simplicity, solve durably, bias toward correctness). The earlier seek-truth/autonomy/resilience hierarchy was my mistake, not the user's principles. [score=0.868 recalls=0 avg=0.620 source=memory/2026-04-29.md:33-33]
+
+## Promoted From Short-Term Memory (2026-05-07)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-04-30.md:2:2 -->
+- - Chan reviewed the 2026-04-30 full-pipeline rewrites and said they are "drastically improved"; treat premise-level rewrites with gates/counterexamples/not-yet framing as a positive signal for the write-post pipeline. [score=0.890 recalls=0 avg=0.620 source=memory/2026-04-30.md:2-2]

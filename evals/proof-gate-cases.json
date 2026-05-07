@@ -336,5 +336,13 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "both_commits_pushed_new_commits_without_verification_fails",
+    "text": "Both commits pushed.\n\nNew commits:\n- `54a4e3f` \u2014 diary: add May 7 2026 dreaming entries and promote memory\n- `38026ce` \u2014 chore: update proof-gate evals and task metrics",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

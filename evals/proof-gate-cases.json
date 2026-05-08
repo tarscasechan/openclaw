@@ -352,5 +352,13 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "new_commit_pushed_with_hash_without_verification_fails",
+    "text": "New commit pushed to `origin/main`:\n- **f7b085c** \u2014 `proof-gate: cover passive-voice done claims, add eval case, update task metrics`",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

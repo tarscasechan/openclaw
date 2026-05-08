@@ -360,5 +360,13 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "committed_and_pushed_one_commit_to_origin_without_verification_fails",
+    "text": "Committed and pushed 1 commit to `origin/main`:\n\n- **9324589** \u2014 `proof-gate: add hash-without-verification eval case, update task metrics`",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

@@ -344,5 +344,13 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "passive_added_updated_commit_rationale_without_artifact_fails",
+    "text": "The changes are logically related: a new proof-gate eval case was added and task metrics were updated. These belong together in one commit.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

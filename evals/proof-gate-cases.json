@@ -368,5 +368,21 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "contacts_cache_refresh_completed_without_verification_fails",
+    "text": "[blocked] Gmail OAuth token is expired/revoked (`invalid_grant`), so I couldn\u2019t search/read/archive/reply. Contacts cache refresh completed successfully.",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
+  },
+  {
+    "id": "numeral_two_commits_created_and_pushed_without_verification_fails",
+    "text": "**2 commits created and pushed to `origin/main`:**\n\n- **7044dcc** \u2014 `proof-gate: cover committed in done-claim verification, add eval case`\n- **6907c60** \u2014 `diary: add May 8 2026 dreaming entries`",
+    "expect_ok": false,
+    "expect_codes": [
+      "unsupported_done"
+    ]
   }
 ]

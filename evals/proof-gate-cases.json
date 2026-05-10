@@ -400,5 +400,17 @@
     "expect_codes": [
       "unsupported_done"
     ]
+  },
+  {
+    "id": "quoted_created_commits_phrase_explanation_passes",
+    "text": "Three related changes: tightening proof-gate rule to cover \"Created commits:\" phrase, adding the corresponding eval case, and updating status metrics. These are one logical group.",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
+    "id": "single_quoted_created_commits_commit_subject_passes",
+    "text": "New commit:\n- **8be3cee** proof-gate: cover bare 'Created commits:' claims, add eval case, update metrics",
+    "expect_ok": true,
+    "expect_codes": []
   }
 ]

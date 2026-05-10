@@ -211,9 +211,10 @@ def find_violations(text: str) -> list[Violation]:
     if explanatory:
         return []
 
-    done_match = DONE_RE.search(compact)
-    conditional_done = bool(re.search(r"(?i)\b(once|when|after)\b.{0,80}\bdone\b", compact))
-    if done_match and not conditional_done and not is_modal_passive_done(compact, done_match) and not is_getting_things_done_title(compact, done_match) and not has_done_evidence(compact):
+    done_text = strip_quoted_fragments(compact)
+    done_match = DONE_RE.search(done_text)
+    conditional_done = bool(re.search(r"(?i)\b(once|when|after)\b.{0,80}\bdone\b", done_text))
+    if done_match and not conditional_done and not is_modal_passive_done(done_text, done_match) and not is_getting_things_done_title(done_text, done_match) and not has_done_evidence(compact):
         violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
     running_text = strip_quoted_fragments(compact)

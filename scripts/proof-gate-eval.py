@@ -39,7 +39,7 @@ DONE_EVIDENCE_RE = re.compile(
 )
 RUNNING_EVIDENCE_RE = re.compile(r"(?i)\b(process|pid|sessionId|session id|jobId|job id|cron job|task id|run id|background session)\b")
 TEST_EVIDENCE_RE = re.compile(r"(?i)\b(test output|verified(?::|\b)|evidence(?::|\b)|exit(?:ed)?\s*0|\d+\s+(?:tests?\s+)?passed|\d+\s+failed|logs?/|source(?::|\b)|commands? run|jq|pytest|npm test|python3|git diff --check|process|pid)\b")
-BLOCKED_EVIDENCE_RE = re.compile(r"(?i)\b(because|missing|required|needs?|waiting for|blocked by|cannot|permission|credentials?|input|decision|approval|error:|invalid_grant|oauth|auth(?:entication)?|token|expired|revoked|re-auth)\b")
+BLOCKED_EVIDENCE_RE = re.compile(r"(?i)\b(because|missing|required|needs?|waiting for|blocked by|cannot|failed|failure|permission|credentials?|input|decision|approval|error:|invalid_grant|oauth|auth(?:entication)?|token|expired|revoked|re-auth)\b")
 FOLLOWUP_EVIDENCE_RE = re.compile(r"(?i)\b(cron|jobId|job id|scheduled|reminder|task id|run id|wake|calendar|timer)\b")
 
 # Phrases used in explanation or code examples should not be treated as claims.
@@ -197,6 +197,14 @@ def is_getting_things_done_title(text: str, match: re.Match[str]) -> bool:
     return bool(re.search(r"(?i)getting\s+things\s+done", window))
 
 
+def is_verification_need_not_claim(text: str, match: re.Match[str]) -> bool:
+    # "I need to verify the commit was created" names an unverified state to
+    # check; it is not itself a completion claim. Bare "commit created" still
+    # fails unless evidence is present.
+    prefix = text[max(0, match.start() - 80):match.start()]
+    return bool(re.search(r"(?i)\bneed\s+to\s+verify\b.{0,60}$", prefix))
+
+
 def find_violations(text: str) -> list[Violation]:
     compact = compact_text(text)
     if not compact or compact == "HEARTBEAT_OK" or compact == "NO_REPLY":
@@ -214,7 +222,7 @@ def find_violations(text: str) -> list[Violation]:
     done_text = strip_quoted_fragments(compact)
     done_match = DONE_RE.search(done_text)
     conditional_done = bool(re.search(r"(?i)\b(once|when|after)\b.{0,80}\bdone\b", done_text))
-    if done_match and not conditional_done and not is_modal_passive_done(done_text, done_match) and not is_getting_things_done_title(done_text, done_match) and not has_done_evidence(compact):
+    if done_match and not conditional_done and not is_modal_passive_done(done_text, done_match) and not is_getting_things_done_title(done_text, done_match) and not is_verification_need_not_claim(done_text, done_match) and not has_done_evidence(compact):
         violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
     running_text = strip_quoted_fragments(compact)

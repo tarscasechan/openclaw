@@ -197,6 +197,14 @@ def is_getting_things_done_title(text: str, match: re.Match[str]) -> bool:
     return bool(re.search(r"(?i)getting\s+things\s+done", window))
 
 
+def is_hyphenated_done_label(text: str, match: re.Match[str]) -> bool:
+    # Taxonomy/commit-subject terms like "done-claim" name a rule label; they
+    # are not a claim that the assistant completed work.
+    if match.group(0).endswith("-"):
+        return match.end() < len(text) and text[match.end()].isalpha()
+    return match.end() + 1 < len(text) and text[match.end()] == "-" and text[match.end() + 1].isalpha()
+
+
 def is_verification_need_not_claim(text: str, match: re.Match[str]) -> bool:
     # "I need to verify the commit was created" names an unverified state to
     # check; it is not itself a completion claim. Bare "commit created" still
@@ -222,7 +230,7 @@ def find_violations(text: str) -> list[Violation]:
     done_text = strip_quoted_fragments(compact)
     done_match = DONE_RE.search(done_text)
     conditional_done = bool(re.search(r"(?i)\b(once|when|after)\b.{0,80}\bdone\b", done_text))
-    if done_match and not conditional_done and not is_modal_passive_done(done_text, done_match) and not is_getting_things_done_title(done_text, done_match) and not is_verification_need_not_claim(done_text, done_match) and not has_done_evidence(compact):
+    if done_match and not conditional_done and not is_modal_passive_done(done_text, done_match) and not is_getting_things_done_title(done_text, done_match) and not is_hyphenated_done_label(done_text, done_match) and not is_verification_need_not_claim(done_text, done_match) and not has_done_evidence(compact):
         violations.append(Violation("unsupported_done", "done", done_match.group(0), "artifact plus verification evidence"))
 
     running_text = strip_quoted_fragments(compact)

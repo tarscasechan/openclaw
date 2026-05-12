@@ -245,6 +245,12 @@
     "expect_codes": []
   },
   {
+    "id": "hyphenated_done_claim_rule_label_passes",
+    "text": "- `c929c80` docs: expand proof-gate done-claim rules",
+    "expect_ok": true,
+    "expect_codes": []
+  },
+  {
     "id": "let_me_commit_and_push_without_evidence_fails",
     "text": "Let me commit and push.",
     "expect_ok": false,

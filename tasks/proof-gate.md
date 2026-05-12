@@ -3,10 +3,10 @@
 Goal: enforce operating principles with evals instead of trust.
 
 Status: passing
-Last run: 2026-05-12T12:29:06Z
+Last run: 2026-05-12T18:43:48Z
 Unit cases: 63 total, 0 failures
-Live audit: 105 final answers scanned, 0 flagged, 1 acknowledged
-Consecutive passes: 11
+Live audit: 116 final answers scanned, 0 flagged, 2 acknowledged
+Consecutive passes: 4
 Completion rule: disable cron after 24 consecutive passing runs and 24h minimum age
 Next slice: continue bounded audit until completion criteria are met
 Blocker: none

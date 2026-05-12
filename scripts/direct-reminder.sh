@@ -16,11 +16,11 @@ name="direct-reminder-$(date +%Y%m%d-%H%M%S)"
 
 openclaw cron add \
   --name "$name" \
-  --description "[managed-by=direct-reminder] One-shot reminder to the contact's BlueBubbles account." \
+  --description "[managed-by=direct-reminder] One-shot reminder via iMessage (OpenClaw imsg channel)." \
   --at "$delay" \
   --delete-after-run \
   --session isolated \
-  --channel bluebubbles \
+  --channel imessage \
   --to "$target" \
   --message "$message" \
   --announce \

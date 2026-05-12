@@ -10,7 +10,7 @@
 
 ## Communication
 
-- **Channel**: BlueBubbles (number on file)
+- **Channel**: OpenClaw **iMessage** (`channels.imessage` via [`imsg`](https://github.com/steipete/imsg); number on file)
 - **dmPolicy**: pairing — approve contacts to message me
 
 ## Setup (2026-04-22)
@@ -26,11 +26,11 @@
 Minimal working setup tracked in `brew/Brewfile`:
 
 - gh, node@24, ollama, openai-whisper, opencode, summarize, uv
-- bluebubbles (cask), memo (app), nano-pdf (uv)
+- imsg (`brew install steipete/tap/imsg`), memo (app), nano-pdf (uv)
 
 Uninstalled (unconfigured):
 
-- 1password-cli, ffmpeg, himalaya, camsnap, gogcli, goplaces, imsg, remindctl, obsidian-cli
+- 1password-cli, ffmpeg, himalaya, camsnap, gogcli, goplaces, remindctl, obsidian-cli
 - yakitrak/yakitrak tap removed (was only obsidian-cli)
 
 ## Preferences

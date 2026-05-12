@@ -18,6 +18,7 @@ Canonical structure lives in `../write-post/references/reader-journey.md` and `.
 - Do not invent details to rescue a weak brief.
 - Use Want/Need/Get as scaffolding only. Do not include `Want`, `Need`, or `Get` as section headings in the draft unless the user asks for the brief format.
 - Draft from the reader journey: hook, recognition, friction, turn, mechanism, tradeoff, landing.
+- Preserve the selected hook unless it breaks in prose; if it breaks, make the smallest repair and keep the same tension/promise.
 - Lead with the point.
 - Use progressive disclosure.
 - Keep paragraphs short.

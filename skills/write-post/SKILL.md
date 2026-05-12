@@ -7,9 +7,9 @@ description: Orchestrate blog-post writing from rough idea to publishable draft.
 
 ## Purpose
 
-Turn an idea into a builder-first post with a strong angle, real reader pain, useful demonstrations, and lean prose.
+Turn an idea into a builder-first post with a strong angle, real reader pain, useful demonstrations, a working hook, and lean prose.
 
-This is an orchestrator skill. Compose the child skills; do not hide the workflow inside one pass. Use `references/state-machine.md` for stage transitions, `references/contracts.md` for proof/state/resume behavior, `references/voice-contract.md` for speaker/reader stance, `references/hooks.md` for first-sentence craft, `references/reader-journey.md` to translate structure into prose, and `references/taste-memory.md` for confirmed taste preferences.
+This is an orchestrator skill. Compose the child skills; do not hide the workflow inside one pass. Use `references/state-machine.md` for stage transitions, `references/contracts.md` for proof/state/resume behavior, `references/voice-contract.md` for speaker/reader stance, `hook-writing` for hook generation/critique, `references/hooks.md` for local post-specific hook taste, `references/reader-journey.md` to translate structure into prose, and `references/taste-memory.md` for confirmed taste preferences.
 
 ## Start every run
 
@@ -28,8 +28,8 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
    Gate: the post knows who is speaking, who is being addressed, and whether `I`, `you`, `we`, or mostly third-person best serves the piece.
 2. **Ideate** with `ideate-topic`.
    Gate: the angle names a concrete reader, tension, and reason it matters now. If the pain is vague, restart from concept.
-3. **Run hook lab** with `references/hooks.md`.
-   Gate: generate 3-5 short first-sentence candidates tied to hook type and reader tension. Pick one working hook before drafting. Prefer hooks with a turn over atmospheric openings when the piece has a personal discovery or systems reversal.
+3. **Run hook lab** with `hook-writing`; use `references/hooks.md` only as local post-specific taste guidance.
+   Gate: generate 3-5 short first-sentence candidates tied to hook type, reader tension, and promise fit. Pick one working hook before drafting. Prefer hooks with a turn over atmospheric openings when the piece has a personal discovery or systems reversal. Reject hooks whose second sentence cannot pay off the opening.
 4. **Research pain points** with `research-pain-points`.
    Gate: collect failures, costs, objections, attempted workarounds, and author stake when available. Prefer direct evidence over generic market claims.
 5. **Package** with `package-topic` and `references/want-need-get.md`.
@@ -57,6 +57,7 @@ For vague input, do not ask a checklist. Ask one focused question, or state one 
 - Restart from concept if ideation, reader pain, or the want/need/get structure is weak.
 - Treat want/need/get as planning structure. Translate it into natural prose for the post body.
 - Keep voice, hook, and structure connected. Do not let a clean framework erase the speaker.
+- Treat `hook-writing` as the general hook procedure and `references/hooks.md` as Chan/Tars post taste. Do not duplicate all hook doctrine into the orchestrator.
 - Use `references/taste-memory.md` as medium-confidence guidance. Apply it, but do not turn one review answer into a universal prohibition.
 - If a gate fails, stop at that gate. Do not produce the downstream artifact in the same response.
 - Keep demos earned, not decorative. Preserve useful prompt blocks and decision trees; simplify heavy diagrams before cutting them.

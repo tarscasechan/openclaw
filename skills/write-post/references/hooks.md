@@ -2,6 +2,8 @@
 
 A hook is the first sentence or two that gives the reader a reason to keep reading.
 
+This file is local taste guidance for `write-post`. Use the `hook-writing` skill for the general hook workflow, strategy set, and critique rubric.
+
 ## Bar
 
 - short
@@ -50,6 +52,8 @@ Pick one working hook before drafting. Reject hooks that:
 - use cleverness without pain
 - set atmosphere without reaching the argument
 - could open any article on the internet
+
+Also reject a hook if the second sentence cannot pay it off. A hook should open a loop the piece can honestly close, not create a flashy detour.
 
 ## Taste Checks
 
